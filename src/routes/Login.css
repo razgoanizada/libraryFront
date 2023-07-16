@@ -1,0 +1,11 @@
+@media (max-width: 992px) {
+    .custom-form-control::placeholder {
+      visibility: hidden !important;
+    }
+    .login {
+        height: 100vh;
+      }
+}
+.login-img {
+    height: 100vh;
+}
