@@ -1,0 +1,17 @@
+.menu-top {
+    background-color: #2384ce;
+}
+
+
+.links, #navbarScrollingDropdown {
+    color: white;
+    font-size: 20px;
+}
+
+#navbarScrollingDropdown:hover {
+    color: black;
+}
+
+ .account .nav-link::after {
+    display: none;
+  }
