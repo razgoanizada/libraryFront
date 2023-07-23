@@ -4,7 +4,6 @@ import { useContext } from "react";
 export const HasPermission = (role: String) => {
     const { permission } = useContext(AuthContext);
 
-
     if (role === "pro" && (permission === "admin" || permission === "pro")) {
 
         return true;

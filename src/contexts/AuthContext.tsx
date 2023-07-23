@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextState>(initialState);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
  const [isLoggedIn, setIsLoggedIn] = useState(false);
- const [userName, setUsername] = useState<string>();
+ const [userName, setUserName] = useState<string>();
  const [token, setToken] = useState<string>();
  const [permission, setPermission] = useState<string>();
 
@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      const user = JSON.parse(data);
      setIsLoggedIn(true);
      setToken(user.token);
-     setUsername(user.username);
+     setUserName(user.userName);
      setPermission(user.permission)
    }
  }, []);
@@ -39,14 +39,14 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
    userName,
    permission,
    login: (username: string, token: string, permission: string) => {
-     setUsername(username);
+    setUserName(username);
      setToken(token);
      setPermission(permission)
      setIsLoggedIn(true);
    },
    logout: () => {
      localStorage.removeItem("user");
-     setUsername(undefined);
+     setUserName(undefined);
      setToken(undefined);
      setPermission(undefined);
      setIsLoggedIn(false);

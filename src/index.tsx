@@ -15,7 +15,7 @@ const client = new QueryClient();
 root.render(
   <QueryClientProvider client={client}>
     <BrowserRouter>
-      <AuthContextProvider>
+    <AuthContextProvider>
       <App />
       </AuthContextProvider>
     </BrowserRouter>

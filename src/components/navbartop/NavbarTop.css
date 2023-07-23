@@ -2,8 +2,8 @@
     background-color: #2384ce;
 }
 
-
-.links, #navbarScrollingDropdown {
+.links,
+#navbarScrollingDropdown {
     color: white;
     font-size: 20px;
 }
@@ -12,6 +12,11 @@
     color: black;
 }
 
- .account .nav-link::after {
+.account .nav-link::after {
     display: none;
-  }
+}
+
+.clock {
+
+    color: aliceblue;
+}

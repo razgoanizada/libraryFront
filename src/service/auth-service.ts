@@ -3,8 +3,7 @@ import axios from "axios";
 const basuUrl = 'http://localhost:8081/api/v1';
 export const login = (userName: String, password: String) => {
 
-    return axios
-    .post(`${basuUrl}/login`, {userName, password})
+    return axios.post(`${basuUrl}/login`, {userName, password})
     .then((res) => {
 
        const token = res.data.jwt;

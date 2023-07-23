@@ -1,6 +1,6 @@
 
-const Home = () => {
-
+const AddBook = () => {
+ 
   return (
     <>
     <h1>home</h1>
@@ -8,4 +8,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AddBook;
