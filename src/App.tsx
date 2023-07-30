@@ -8,10 +8,12 @@ import About from "./routes/General/About";
 import NavbarTop from "./components/navbartop/NavbarTop";
 import { HasPermission } from "./utils/HasPermission";
 import Login from "./routes/General/Login/Login";
-import AddLibrarian from "./routes/settings/AddLibrarian";
+import AddLibrarian from "./routes/settings/librarians/AddLibrarian";
 import Unauthorized from "./routes/General/Unauthorized";
-import AddBook from "./routes/models/AddBook";
-import AddCustomer from "./routes/models/AddCustomer";
+import AddBook from "./routes/models/books/AddBook";
+import AddCustomer from "./routes/models/customers/AddCustomer";
+import Customers from "./routes/models/customers/Customers";
+import BookCategory from "./routes/settings/BookCategory";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -27,18 +29,21 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/customers" element={<Customers />} />
                 <Route path="/customers-add" element={<AddCustomer />} />
               </>
               <>
                 {HasPermission("admin") && (
                   <>
                     <Route path="/librarians-add" element={<AddLibrarian />} />
+                    <Route path="/books-category" element={<BookCategory />} />
                   </>
                 )}
                 ;
                 {!HasPermission("admin") && (
                   <>
                     <Route path="/librarians-add" element={<Unauthorized />} />
+                    <Route path="/books-category" element={<Unauthorized />} />
                   </>
                 )}
                 ;

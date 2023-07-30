@@ -1,14 +1,19 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
+import { logout } from "../service/auth-service";
+import { Navigate } from "react-router";
 const baseUrl = "http://localhost:8081/api/v1";
 
 const client = axios.create({ baseURL: baseUrl });
 
 //middleware/interceptor:  catch the error => log it and re-throw
-const onFailure = (e: any) => {
-  //send the e to a log server (Log Rocket/Grafana/analytics service)
-  console.log(e);
-  throw e;
+const onFailure = (error: any) => {
+  
+  const errorMessage = error?.response?.data?.message;
+  if(errorMessage == "Expired") {
+    logout()
+  }
+
+  throw new Error(error?.response?.data?.detail || "Unknown error occurred");
 };
 
 const onSuccess = (res: AxiosResponse) => {

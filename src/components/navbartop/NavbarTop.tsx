@@ -14,7 +14,7 @@ const NavbarTop = () => {
   const { logout, userName } = useContext(AuthContext);
 
   return (
-    <Navbar expand="lg" className="menu-top row w-100 m-0">
+    <Navbar expand="lg" className="menu-top sticky-top row w-100 m-0">
       <Container className="">
         <Navbar.Brand href="/" className="">
           <img src={logo} alt="home" />
@@ -66,7 +66,7 @@ const NavbarTop = () => {
                 id="navbarScrollingDropdown"
                 className=""
               >
-                <NavDropdown.Item href="#action/3.1">
+                <NavDropdown.Item href="/books-category">
                   Book category
                 </NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
