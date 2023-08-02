@@ -13,4 +13,20 @@ export interface BookCategoriesPage {
     pageSize: number;
   }
 
+  export interface CustomerType {
+    id: number;
+    name: string;
+    days: number;
+    amount: number
+  }
+
+  export interface CustomerTypePage {
+    results: CustomerType[];
+    totalPages: number;
+    totalTypes: number;
+    isFirst: boolean;
+    isLast: boolean;
+    pageNo: number;
+    pageSize: number;
+  }
   

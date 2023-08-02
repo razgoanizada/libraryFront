@@ -14,6 +14,7 @@ import AddBook from "./routes/models/books/AddBook";
 import AddCustomer from "./routes/models/customers/AddCustomer";
 import Customers from "./routes/models/customers/Customers";
 import BookCategory from "./routes/settings/BookCategory";
+import CustomersType from "./routes/settings/CustomersType";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -37,6 +38,7 @@ const App = () => {
                   <>
                     <Route path="/librarians-add" element={<AddLibrarian />} />
                     <Route path="/books-category" element={<BookCategory />} />
+                    <Route path="/customers-type" element={<CustomersType />} />
                   </>
                 )}
                 ;
@@ -44,6 +46,7 @@ const App = () => {
                   <>
                     <Route path="/librarians-add" element={<Unauthorized />} />
                     <Route path="/books-category" element={<Unauthorized />} />
+                    <Route path="/customers-type" element={<Unauthorized />} />
                   </>
                 )}
                 ;

@@ -47,7 +47,7 @@ const Login = () => {
   >
     {(formik) => (
       <div className="d-flex text-center align-items-center bg-light">
-        <div className="login w-100 w-sm-50 m-5 d-flex flex-column justify-content-center">
+        <div className="login w-100 w-sm-50 m-5 d-flex flex-column justify-content-center flex-1">
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>User Name</Form.Label>
@@ -95,7 +95,7 @@ const Login = () => {
             </Button>
           </Form>
         </div>
-        <div className="login-img d-none d-lg-flex">
+        <div className="login-img d-none d-lg-flex lg:flex-1">
           <img src={library} alt="" />
         </div>
       </div>

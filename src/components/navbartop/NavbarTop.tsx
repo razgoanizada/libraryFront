@@ -69,7 +69,7 @@ const NavbarTop = () => {
                 <NavDropdown.Item href="/books-category">
                   Book category
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
+                <NavDropdown.Item href="/customers-type">
                   Types of customers
                 </NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">

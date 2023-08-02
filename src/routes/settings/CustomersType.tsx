@@ -2,39 +2,44 @@ import { useContext, useEffect, useState } from "react";
 import LibraryContext from "../../contexts/LibraryContext";
 import { useQuery } from "react-query";
 import {
-  BookCategoriesAdd,
-  BookCategoriesDelete,
-  BookCategoriesUpdate,
-  BookCategoriesRequest,
+  CustomerTypeRequest,
+  CustomerTypeDelete,
+  CustomerTypeAdd,
+  CustomerTypeUpdate,
 } from "../../service/library-service";
-import { BookCategories } from "../../@Typs";
+import { CustomerType } from "../../@Typs";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
-import "../../style/list.css"
+import "../../style/list.css";
 import Spinner from "../../components/spinners/Spinner";
 
-const BookCategory = () => {
-  // States to manage category data
-  const { setCategoriesPage } = useContext(LibraryContext);
+const CustomersType = () => {
+  // States to manage type data
+  const { setTypsPage } = useContext(LibraryContext);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [days, setDays] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
-  const [newCategoryName, setNewCategoryName] = useState<string>("");
+  const [newTypeName, setNewTypeName] = useState<string>("");
+  const [newTypeDays, setNewTypeDays] = useState<number | "">("");
+  const [newTypeAmount, setNewTypeAmount] = useState<number | "">("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  // States to manage category edit dialog
+  // States to manage type edit dialog
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [selectedTypeDays, setSelectedTypeDays] = useState<number>(0);
+  const [selectedTypeAmount, setSelectedTypeAmount] = useState<number>(0);
+  const [selectedTypeId, setSelectedTypeId] = useState<number>(0);
 
-  // Fetching categories from the server
+  // Fetching types from the server
   const { data: res } = useQuery(
-    "get categories",
-    () => BookCategoriesRequest(currentPage, searchQuery),
+    "get typs",
+    () => CustomerTypeRequest(currentPage, name, days, amount),
     {
       enabled: !pageLoading,
     }
@@ -56,20 +61,20 @@ const BookCategory = () => {
     }
   };
 
-  // Update category data when response is received from the server
+  // Update type data when response is received from the server
   useEffect(() => {
     if (res && res.data) {
-      setCategoriesPage(res.data);
+      setTypsPage(res.data);
       setPageLoading(false);
     }
   }, [currentPage, res]);
 
-  // Function to handle category search
+  // Function to handle type search
   const handleSearch = () => {
     setCurrentPage(0);
     setPageLoading(true);
-    BookCategoriesRequest(0, searchQuery).then((res) => {
-      setCategoriesPage(res.data);
+    CustomerTypeRequest(0, name, days, amount).then((res) => {
+      setTypsPage(res.data);
       setPageLoading(false);
     });
   };
@@ -81,23 +86,42 @@ const BookCategory = () => {
 
   const handleCloseAddDialog = () => {
     setShowAddDialog(false);
-    setNewCategoryName("");
+    setNewTypeName("");
+    setNewTypeDays("");
+    setNewTypeAmount("");
   };
 
   const handleConfirmAdd = () => {
-    if (newCategoryName.length < 2) {
-      
+    if (newTypeName.length < 2) {
       setShowErrorDialog(true);
       setErrorMsg("The name must contain at least 2 characters");
+      return;
+    }
+
+    if (Number(newTypeDays) < 1 || Number(newTypeDays) > 180) {
+      setShowErrorDialog(true);
+      setErrorMsg("The number of days should be between 1 and 180");
+      return;
+    }
+
+    if (Number(newTypeAmount) < 1 || Number(newTypeAmount) > 10) {
+      setShowErrorDialog(true);
+      setErrorMsg("The number of books should be between 1 and 10");
+      return;
+    }
+
+    if (newTypeDays === "" || newTypeAmount === "") {
+      setShowErrorDialog(true);
+      setErrorMsg("Please fill in all the fields.");
       return;
     }
 
     setCurrentPage(0);
     setPageLoading(true);
 
-    BookCategoriesAdd(newCategoryName)
+    CustomerTypeAdd(newTypeName, newTypeDays, newTypeAmount)
       .then((res) => {
-        setCategoriesPage(res.data);
+        setTypsPage(res.data);
         setPageLoading(false);
       })
       .catch((error) => {
@@ -110,30 +134,47 @@ const BookCategory = () => {
   };
 
   // Functions to manage Edit Category dialog
-  const handleOpenEditDialog = (categoryName: string, categoryId: any) => {
-    setSelectedCategoryName(categoryName);
-    setSelectedCategoryId(categoryId);
+  const handleOpenEditDialog = (
+    days: number,
+    amount: number,
+    typeId: number
+  ) => {
+    setSelectedTypeDays(days);
+    setSelectedTypeAmount(amount);
+    setSelectedTypeId(typeId);
     setShowEditDialog(true);
   };
 
   const handleCloseEditDialog = () => {
     setShowEditDialog(false);
-    setSelectedCategoryId(0);
-    setSelectedCategoryName("");
+    setSelectedTypeId(0);
+    setSelectedTypeDays(0);
+    setSelectedTypeAmount(0);
   };
 
   const handleConfirmEdit = () => {
-    if (!selectedCategoryId) return;
+    if (!selectedTypeId) return;
+
+    if (selectedTypeDays < 1 || selectedTypeDays > 180) {
+      setShowErrorDialog(true);
+      setErrorMsg("The number of days should be between 1 and 180");
+      return;
+    }
+
+    if (selectedTypeAmount < 1 || selectedTypeAmount > 10) {
+      setShowErrorDialog(true);
+      setErrorMsg("The number of books should be between 1 and 10");
+      return;
+    }
 
     setCurrentPage(0);
     setPageLoading(true);
 
-    BookCategoriesUpdate(selectedCategoryName, selectedCategoryId)
+    CustomerTypeUpdate(selectedTypeDays, selectedTypeAmount, selectedTypeId)
       .then((res) => {
-        setCategoriesPage(res.data);
+        setTypsPage(res.data);
         setPageLoading(false);
-        setSelectedCategoryId(0);
-        setSelectedCategoryName("");
+        setSelectedTypeId(0);
       })
       .catch((error) => {
         setShowErrorDialog(true);
@@ -145,16 +186,16 @@ const BookCategory = () => {
   };
 
   // Function to handle category deletion
-  const handleDelete = (categoryName: string, categoryId: any) => {
+  const handleDelete = (typeName: string, categoryId: any) => {
     setCurrentPage(0);
     setPageLoading(true);
     const confirmation = window.confirm(
-      `Are you sure you want to delete ${categoryName}?`
+      `Are you sure you want to delete ${typeName}?`
     );
     if (confirmation) {
-      BookCategoriesDelete(categoryId)
+      CustomerTypeDelete(categoryId)
         .then((res) => {
-          setCategoriesPage(res.data);
+          setTypsPage(res.data);
           setPageLoading(false);
         })
         .catch((error) => {
@@ -185,12 +226,25 @@ const BookCategory = () => {
               </button>
             </div>
           </div>
-
           <InputGroup className="search d-flex ms-5">
             <FormControl
-              placeholder="Search categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search types..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <FormControl
+              placeholder="Search amount of days..."
+              className="mx-3 d-none d-md-flex"
+              type="number"
+              value={days}
+              onChange={(e) => setDays(e.target.value)}
+            />
+            <FormControl
+              placeholder="Search amount of books..."
+              className="mx-3 d-none d-md-flex"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
             />
             <Button variant="primary btn-search" onClick={handleSearch}>
               Search
@@ -198,25 +252,29 @@ const BookCategory = () => {
           </InputGroup>
         </div>
 
-        {res?.data.totalCategories > 0 ? (
+        {res?.data.totalTypes > 0 ? (
           <>
             <table className="mt-4">
               <thead>
                 <tr>
-                  <th>Category</th>
+                  <th>Type</th>
+                  <th>Days</th>
+                  <th>Amount</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
-                {res?.data.results.map((category: BookCategories) => (
-                  <tr key={category.id}>
-                    <td>{category.name}</td>
+                {res?.data.results.map((type: CustomerType) => (
+                  <tr key={type.id}>
+                    <td>{type.name}</td>
+                    <td>{type.days}</td>
+                    <td>{type.amount}</td>
                     <td>
                       <button
                         className="edit"
                         onClick={() =>
-                          handleOpenEditDialog(category.name, category.id)
+                          handleOpenEditDialog(type.days, type.amount, type.id)
                         }
                       >
                         <MdModeEditOutline size={30} />
@@ -225,7 +283,7 @@ const BookCategory = () => {
                     <td>
                       <button
                         className="delete"
-                        onClick={() => handleDelete(category.name, category.id)}
+                        onClick={() => handleDelete(type.name, type.id)}
                       >
                         <AiFillDelete size={30} />
                       </button>
@@ -259,14 +317,27 @@ const BookCategory = () => {
 
         <Modal show={showAddDialog} onHide={handleCloseAddDialog}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Category</Modal.Title>
+            <Modal.Title>Add Type</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <FormControl
-              placeholder="Enter category name..."
-              value={newCategoryName}
-              onChange={(e) => 
-                setNewCategoryName(e.target.value)}
+              placeholder="Enter type name..."
+              className="mb-3"
+              value={newTypeName}
+              onChange={(e) => setNewTypeName(e.target.value)}
+            />
+            <FormControl
+              placeholder="Enter the amount of days..."
+              className="mb-3"
+              type="number"
+              value={newTypeDays}
+              onChange={(e) => setNewTypeDays(parseInt(e.target.value, 10))}
+            />
+            <FormControl
+              placeholder="Enter the amount of books..."
+              type="number"
+              value={newTypeAmount}
+              onChange={(e) => setNewTypeAmount(parseInt(e.target.value, 10))}
             />
           </Modal.Body>
           <Modal.Footer>
@@ -283,13 +354,27 @@ const BookCategory = () => {
 
         <Modal show={showEditDialog} onHide={handleCloseEditDialog}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Category</Modal.Title>
+            <Modal.Title>Edit Type</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <label>Days:</label>
             <FormControl
-              placeholder="Enter category name..."
-              value={selectedCategoryName}
-              onChange={(e) => setSelectedCategoryName(e.target.value)}
+              placeholder="Enter the amount of days..."
+              className="mb-3"
+              type="number"
+              value={selectedTypeDays}
+              onChange={(e) =>
+                setSelectedTypeDays(parseInt(e.target.value, 10))
+              }
+            />
+            <label>Amount:</label>
+            <FormControl
+              placeholder="Enter the amount of books..."
+              type="number"
+              value={selectedTypeAmount}
+              onChange={(e) =>
+                setSelectedTypeAmount(parseInt(e.target.value, 10))
+              }
             />
           </Modal.Body>
           <Modal.Footer>
@@ -320,4 +405,4 @@ const BookCategory = () => {
   );
 };
 
-export default BookCategory;
+export default CustomersType;
