@@ -17,12 +17,12 @@
     background-color: rgb(58, 203, 203);
   }
   
-  .delete, .edit {
+  .search-icon, .delete, .edit {
     border: none;
     background: none;
     cursor: pointer;
   }
-  
+
   .edit svg {
       fill: rgb(15, 142, 232);
     }

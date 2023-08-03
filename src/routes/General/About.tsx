@@ -1,7 +1,7 @@
 "bootstrap/dist/css/bootstrap.min.css";
 import { useContext } from "react";
 import AuthContext from "../../contexts/AuthContext";
-import Login from "./Login/Login";
+import Login from "../login/Login";
 
 const About = () => {
 

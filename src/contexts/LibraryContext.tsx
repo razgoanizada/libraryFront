@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useState } from "react";
-import { BookCategories, BookCategoriesPage, CustomerTypePage } from "../@Typs";
+import { BookCategoriesPage, CustomerTypePage, LogPage } from "../@Typs";
 
 
 interface LibraryContextState {
@@ -7,6 +7,8 @@ interface LibraryContextState {
  setCategoriesPage: (categoriesPage: BookCategoriesPage[]) => void;
  typsPage : CustomerTypePage[];
  setTypsPage: (typsPage: CustomerTypePage[]) => void;
+ logsPage : LogPage[];
+ setLogsPage: (logsPage: LogPage[]) => void;
 
 }
 
@@ -15,6 +17,8 @@ const initialState: LibraryContextState = {
     setCategoriesPage: () => {},
     typsPage: [],
     setTypsPage: () => {},
+    logsPage: [],
+    setLogsPage: () => {},
 };
 
 //create context
@@ -24,9 +28,10 @@ const LibraryContext = createContext<LibraryContextState>(initialState);
 export const LibraryContextProvider = ({ children }: { children: ReactNode }) => {
  const [categoriesPage, setCategoriesPage] = useState<BookCategoriesPage[]>([]);
  const [typsPage, setTypsPage] = useState<CustomerTypePage[]>([]);
+ const [logsPage, setLogsPage] = useState<LogPage[]>([]);
 
  return (
-   <LibraryContext.Provider value={{ categoriesPage, setCategoriesPage, typsPage, setTypsPage }}>
+   <LibraryContext.Provider value={{ categoriesPage, setCategoriesPage, typsPage, setTypsPage, logsPage, setLogsPage }}>
      {children}
    </LibraryContext.Provider>
  );

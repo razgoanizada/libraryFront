@@ -12,8 +12,9 @@ import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
+import { LuSearch } from "react-icons/lu";
 import "../../style/list.css"
-import Spinner from "../../components/spinners/Spinner";
+import Spinner from "../../components/animations/Spinner";
 
 const BookCategory = () => {
   // States to manage category data
@@ -192,8 +193,12 @@ const BookCategory = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Button variant="primary btn-search" onClick={handleSearch}>
-              Search
+           <Button
+              variant="btn-search"
+              onClick={handleSearch}
+              className="search-icon"
+            >
+              <LuSearch size={30} />
             </Button>
           </InputGroup>
         </div>

@@ -4,7 +4,7 @@ import { request } from "../utils/axios-interceptors";
 // Book Categories
 export const BookCategoriesRequest = (pageNo: number, name: string) =>
   request({
-    url: `/books-categories/page?pageNo=${pageNo}&&name=${name}`,
+    url: `/books-categories/page?pageNo=${pageNo}&name=${name}`,
   });
 
 export const BookCategoriesAdd = (categoryName: string) =>
@@ -42,7 +42,7 @@ export const BookCategoriesAdd = (categoryName: string) =>
 
   export const CustomerTypeRequest = (pageNo: number, name: string, days: string, amount: string) =>
   request({
-    url: `/customer-type/page?pageNo=${pageNo}&&name=${name}&&days=${days}&&amount=${amount}`,
+    url: `/customer-type/page?pageNo=${pageNo}&name=${name}&days=${days}&amount=${amount}`,
   });
 
   export const CustomerTypeAdd = (name: string, days: number, amount: number) =>
@@ -78,3 +78,9 @@ export const BookCategoriesAdd = (categoryName: string) =>
     },
   });
 
+  // logs
+
+  export const LogsRequest = (pageNo: number, username: string, isLogin: boolean, dateStart: string, dateEnd: string) =>
+  request({
+    url: `/logs/page?pageNo=${pageNo}&userName=${username}&isLogin=${isLogin}&DateStart=${dateStart}&DateEnd=${dateEnd}`,
+  });

@@ -8,7 +8,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import "./NavbarTop.css";
 import AuthContext from "../../contexts/AuthContext";
 import { HasPermission } from "../../utils/HasPermission";
-import Clock from "../Clock";
+import Clock from "../animations/Clock";
 
 const NavbarTop = () => {
   const { logout, userName } = useContext(AuthContext);
@@ -72,6 +72,7 @@ const NavbarTop = () => {
                 <NavDropdown.Item href="/customers-type">
                   Types of customers
                 </NavDropdown.Item>
+                <NavDropdown.Item href="/logs">List of logs</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">
                   Add a new librarian
                 </NavDropdown.Item>
@@ -95,7 +96,6 @@ const NavbarTop = () => {
             <Nav.Link href="/about" className="links d-lg-none">
               About
             </Nav.Link>
-
           </Nav>
           <Nav className="me-auto col-lg-6 col-xl-5 col-xxl-4 d-none d-lg-flex justify-content-end align-items-center">
             <Nav.Link href="#link" className="links col-1">

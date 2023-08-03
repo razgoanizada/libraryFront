@@ -4,10 +4,10 @@ import { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
-import library from "../../../images/library.jpg";
+import library from "../../images/library.jpg";
 import "./Login.css";
-import authService from "../../../service/auth-service";
-import AuthContext from "../../../contexts/AuthContext";
+import authService from "../../service/auth-service";
+import AuthContext from "../../contexts/AuthContext";
 
 const Login = () => {
   const {login } = useContext(AuthContext);

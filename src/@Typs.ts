@@ -29,4 +29,22 @@ export interface BookCategoriesPage {
     pageNo: number;
     pageSize: number;
   }
+
+  export interface Log {
+    id: number;
+    username: string;
+    ipAddress: number;
+    login: boolean;
+    loginDate : Date
+  }
+
+  export interface LogPage {
+    results: Log[];
+    totalPages: number;
+    totalLogs: number;
+    isFirst: boolean;
+    isLast: boolean;
+    pageNo: number;
+    pageSize: number;
+  }
   

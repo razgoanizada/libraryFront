@@ -12,8 +12,9 @@ import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
+import { LuSearch } from "react-icons/lu";
 import "../../style/list.css";
-import Spinner from "../../components/spinners/Spinner";
+import Spinner from "../../components/animations/Spinner";
 
 const CustomersType = () => {
   // States to manage type data
@@ -79,7 +80,7 @@ const CustomersType = () => {
     });
   };
 
-  // Functions to manage Add Category dialog
+  // Functions to manage Add type dialog
   const handleOpenAddDialog = () => {
     setShowAddDialog(true);
   };
@@ -185,7 +186,7 @@ const CustomersType = () => {
     setShowEditDialog(false);
   };
 
-  // Function to handle category deletion
+  // Function to handle type deletion
   const handleDelete = (typeName: string, categoryId: any) => {
     setCurrentPage(0);
     setPageLoading(true);
@@ -246,8 +247,12 @@ const CustomersType = () => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
-            <Button variant="primary btn-search" onClick={handleSearch}>
-              Search
+            <Button
+              variant="btn-search"
+              onClick={handleSearch}
+              className="search-icon"
+            >
+              <LuSearch size={30} />
             </Button>
           </InputGroup>
         </div>
