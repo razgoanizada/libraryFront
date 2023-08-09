@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import LibraryContext from "../../contexts/LibraryContext";
+import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
-import { LogsRequest } from "../../service/library-service";
-import { Log } from "../../@Typs";
+import { LogsRequest } from "../../../service/library-service";
+import { Log } from "../../../@Typs";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { LuSearch } from "react-icons/lu";
-import "../../style/list.css";
-import Spinner from "../../components/animations/Spinner";
+import "../../../style/list.css";
+import Spinner from "../../../components/animations/Spinner";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -136,7 +136,7 @@ const Logs = () => {
                 {res?.data.results.map((log: Log) => (
                   <tr key={log.id}>
                     <td>{log.username}</td>
-                    <td>{log.login.toString()}</td>
+                   <td> {log.login.toString()}</td>
                     <td>{log.loginDate.toString()}</td>
                     <td>{log.ipAddress}</td>
                   </tr>

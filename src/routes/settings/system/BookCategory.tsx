@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import LibraryContext from "../../contexts/LibraryContext";
+import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
 import {
   BookCategoriesAdd,
   BookCategoriesDelete,
   BookCategoriesUpdate,
   BookCategoriesRequest,
-} from "../../service/library-service";
-import { BookCategories } from "../../@Typs";
+} from "../../../service/library-service";
+import { BookCategories } from "../../../@Typs";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
-import "../../style/list.css"
-import Spinner from "../../components/animations/Spinner";
+import "../../../style/list.css"
+import Spinner from "../../../components/animations/Spinner";
 
 const BookCategory = () => {
   // States to manage category data

@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import LibraryContext from "../../contexts/LibraryContext";
+import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
 import {
   CustomerTypeRequest,
   CustomerTypeDelete,
   CustomerTypeAdd,
   CustomerTypeUpdate,
-} from "../../service/library-service";
-import { CustomerType } from "../../@Typs";
+} from "../../../service/library-service";
+import { CustomerType } from "../../../@Typs";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
-import "../../style/list.css";
-import Spinner from "../../components/animations/Spinner";
+import "../../../style/list.css"
+import Spinner from "../../../components/animations/Spinner";
 
 const CustomersType = () => {
   // States to manage type data
@@ -187,14 +187,14 @@ const CustomersType = () => {
   };
 
   // Function to handle type deletion
-  const handleDelete = (typeName: string, categoryId: any) => {
+  const handleDelete = (typeName: string, typeId: any) => {
     setCurrentPage(0);
     setPageLoading(true);
     const confirmation = window.confirm(
       `Are you sure you want to delete ${typeName}?`
     );
     if (confirmation) {
-      CustomerTypeDelete(categoryId)
+      CustomerTypeDelete(typeId)
         .then((res) => {
           setTypsPage(res.data);
           setPageLoading(false);

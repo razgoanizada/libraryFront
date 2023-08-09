@@ -73,10 +73,10 @@ const NavbarTop = () => {
                   Types of customers
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/logs">List of logs</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
+                <NavDropdown.Item href="/librarians-add">
                   Add a new librarian
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
+                <NavDropdown.Item href="/librarians">
                   List of librarians
                 </NavDropdown.Item>
               </NavDropdown>
