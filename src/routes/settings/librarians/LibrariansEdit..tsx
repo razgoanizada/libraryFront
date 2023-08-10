@@ -75,9 +75,9 @@ const LibrariansEdit = () => {
         permission,
         librarian?.id
       )
-        .then((res) => {
+        .then(() => {
           Swal.fire({
-            title: "Librarian successfully added",
+            title: "Librarian successfully save",
             icon: "success",
             timer: 2000,
           });

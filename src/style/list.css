@@ -56,10 +56,7 @@ th {
 }
 
 @media (max-width: 991px) {
-  .search input::placeholder {
-    opacity: 0;
-  }
-
+ 
   .col-none {
     display: none;
   }

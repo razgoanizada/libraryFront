@@ -101,7 +101,7 @@ const AddLibrarian = () => {
             Swal.fire({
               title: "Librarian successfully added",
               icon: "success",
-              timer: 3000,
+              timer: 2000,
             });
             //navigate
             nav("/librarians");

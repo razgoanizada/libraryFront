@@ -76,8 +76,8 @@ const Logs = () => {
 
   return (
     <div className="container mt-3">
-      <div className="d-flex flex-column">
-        <div className="d-flex">
+      <div className="flex flex-col">
+        <div className="flex">
           <InputGroup className="search d-flex">
             <FormControl
               placeholder="Search user name..."

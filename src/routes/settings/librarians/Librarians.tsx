@@ -18,6 +18,7 @@ import Spinner from "../../../components/animations/Spinner";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const Librarians = () => {
   // States to manage librarian data
@@ -186,268 +187,287 @@ const Librarians = () => {
   const isLoading = pageLoading || !res;
 
   return (
-    <div className="container mt-3">
-      <div className="flex flex-column">
-        <div className="flex">
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <Link
-                to="/librarians-add"
-                className="add btn-primary py-2 px-2 rounded-lg"
-              >
-                <div className="flex items-center text-black">
-                  <CgAdd className="w-6 h-6" />
-                  <span className="ml-2">Add</span>
+    <>
+      <Helmet>
+        <title>Librarians</title>
+      </Helmet>
+
+      <div className="container mt-3">
+        <div className="flex flex-column">
+          <div className="flex">
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <Link
+                  to="/librarians-add"
+                  className="add btn-primary py-2 px-2 rounded-lg"
+                >
+                  <div className="flex items-center text-black">
+                    <CgAdd className="w-6 h-6" />
+                    <span className="ml-2">Add</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+            <InputGroup className="search row ms-5">
+              <div className="search-bar">
+                <div className="flex col-10">
+                  <FormControl
+                    placeholder="Search User..."
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                  />
+                  <Button
+                    variant="btn-search"
+                    onClick={handleSearch}
+                    className="search-icon d-flex d-lg-none"
+                  >
+                    <FcSearch size={30} />
+                  </Button>
+                  <FormControl
+                    placeholder="Search first name..."
+                    className="mx-3 d-none d-lg-flex"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  <FormControl
+                    placeholder="Search last name..."
+                    className="mx-3 d-none d-lg-flex"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
                 </div>
-              </Link>
-            </div>
+                <div className="flex col-11 mt-3">
+                  <FormControl
+                    placeholder="Search ID..."
+                    className="mx-3 d-none d-lg-flex"
+                    value={tz}
+                    onChange={(e) => setTz(e.target.value)}
+                  />
+                  <FormControl
+                    placeholder="Search phone..."
+                    className="mx-3 d-none d-lg-flex"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                  <FormControl
+                    as="select"
+                    placeholder="select"
+                    className="d-none d-lg-flex"
+                    value={permission}
+                    onChange={(e) => setPermission(e.target.value)}
+                  >
+                    <option value={""} className="bg-stone-500">
+                      Select
+                    </option>
+                    <option value={"3"}>Simple</option>
+                    <option value={"2"}>Pro</option>
+                    <option value={"1"}>Admin</option>
+                  </FormControl>
+                  <Button
+                    variant="btn-search"
+                    onClick={handleSearch}
+                    className="search-icon d-none d-lg-flex"
+                  >
+                    <LuSearch size={30} />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="d-none d-lg-flex"
+                    onClick={() => {
+                      setUserName("");
+                      setFirstName("");
+                      setLastName("");
+                      setTz("");
+                      setPhone("");
+                      setPermission("");
+                      handleSearch();
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </div>
+              </div>
+            </InputGroup>
           </div>
-          <InputGroup className="search row ms-5">
-            <div className="search-bar">
-              <div className="flex col-10">
-                <FormControl
-                  placeholder="Search User..."
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                />
-                <Button
-                  variant="btn-search"
-                  onClick={handleSearch}
-                  className="search-icon d-flex d-lg-none"
-                >
-                  <FcSearch size={30} />
-                </Button>
-                <FormControl
-                  placeholder="Search first name..."
-                  className="mx-3 d-none d-lg-flex"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-                <FormControl
-                  placeholder="Search last name..."
-                  className="mx-3 d-none d-lg-flex"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </div>
-              <div className="flex col-11 mt-3">
-                <FormControl
-                  placeholder="Search ID..."
-                  className="mx-3 d-none d-lg-flex"
-                  value={tz}
-                  onChange={(e) => setTz(e.target.value)}
-                />
-                <FormControl
-                  placeholder="Search phone..."
-                  className="mx-3 d-none d-lg-flex"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-                <FormControl
-                  as="select"
-                  placeholder="select"
-                  className="d-none d-lg-flex"
-                  value={permission}
-                  onChange={(e) => setPermission(e.target.value)}
-                >
-                  <option value={""} className="bg-stone-500">
-                    Select
-                  </option>
-                  <option value={"3"}>Simple</option>
-                  <option value={"2"}>Pro</option>
-                  <option value={"1"}>Admin</option>
-                </FormControl>
-                <Button
-                  variant="btn-search"
-                  onClick={handleSearch}
-                  className="search-icon d-none d-lg-flex"
-                >
-                  <LuSearch size={30} />
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="d-none d-lg-flex"
-                  onClick={() => {
-                    setUserName("");
-                    setFirstName("");
-                    setLastName("");
-                    setTz("");
-                    setPhone("");
-                    setPermission("");
-                    handleSearch();
-                  }}
-                >
-                  Reset
-                </Button>
-              </div>
-            </div>
-          </InputGroup>
-        </div>
 
-        {res?.data.totalLibrarians > 0 ? (
-          <>
-            <table className="mt-4">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th className="col-none">Name</th>
-                  <th className="col-none">ID</th>
-                  <th className="col-none">Phone</th>
-                  <th className="col-none">Permission</th>
-                  <th className="col-none">Last Login</th>
-                  <th>Change Password</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {res?.data.results.map((librarian: Librarian) => (
-                  <tr key={librarian.id}>
-                    <td>
-                      <Link
-                        to={`/librarians/${librarian.id}`}
-                        key={librarian.id}
-                      >
-                        {librarian.userName}
-                      </Link>
-                    </td>
-                    <td className="col-none">
-                      {librarian.firstName} {librarian.lastName}
-                    </td>
-                    <td className="col-none">{librarian.tz}</td>
-                    <td className="col-none">{librarian.phone}</td>
-                    <td className="col-none">{librarian.permission}</td>
-                    <td className="col-none">
-                      {librarian.lastLogin
-                        ? format(
-                            new Date(librarian.lastLogin),
-                            "yyyy-MM-dd HH:mm:ss"
-                          )
-                        : "Does not exist"}
-                    </td>
-                    <td>
-                      {" "}
-                      <button
-                        onClick={() =>
-                          librarian.userName === "admin"
-                            ? alert(
-                                "You cannot change the admin user password."
-                              )
-                            : handleOpenChangeDialog(librarian.id)
-                        }
-                      >
-                        {librarian.userName === "admin" ? (
-                          <AiFillLock size={30} />
-                        ) : (
-                          <Button>Change</Button>
-                        )}
-                      </button>
-                    </td>
-                    <td>
-                      <button className="edit">
-                        {librarian.userName === "admin" ? (
-                          <AiFillLock size={30} />
-                        ) : (
-                          <Link
-                            to={`/librarians-edit/${librarian.id}`}
-                            key={librarian.id}
-                          >
-                            <MdModeEditOutline size={30} />
-                          </Link>
-                        )}
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="delete"
-                        onClick={() =>
-                          librarian.userName !== "admin"
-                            ? handleDelete(librarian.userName, librarian.id)
-                            : alert("You cannot delete an admin user.")
-                        }
-                      >
-                        {librarian.userName === "admin" ? (
-                          <AiFillLock size={30} />
-                        ) : (
-                          <AiFillDelete size={30} />
-                        )}
-                      </button>
-                    </td>
+          {res?.data.totalLibrarians > 0 ? (
+            <>
+              <table className="mt-4">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th className="col-none">Name</th>
+                    <th className="col-none">ID</th>
+                    <th className="col-none">Phone</th>
+                    <th className="col-none">Permission</th>
+                    <th className="col-none">Last Login</th>
+                    <th>Change Password</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-5">
-              Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
-              Showing {res?.data.pageSize} results per page
-            </p>
+                </thead>
+                <tbody>
+                  {res?.data.results.map((librarian: Librarian) => (
+                    <tr key={librarian.id}>
+                      <td>
+                        <Link
+                          to={`/librarians/${librarian.id}`}
+                          key={librarian.id}
+                        >
+                          {librarian.userName}
+                        </Link>
+                      </td>
+                      <td className="col-none">
+                        {librarian.firstName} {librarian.lastName}
+                      </td>
+                      <td className="col-none">{librarian.tz}</td>
+                      <td className="col-none">{librarian.phone}</td>
+                      <td className="col-none">{librarian.permission}</td>
+                      <td className="col-none">
+                        {librarian.lastLogin
+                          ? format(
+                              new Date(librarian.lastLogin),
+                              "yyyy-MM-dd HH:mm:ss"
+                            )
+                          : "Does not exist"}
+                      </td>
+                      <td>
+                        {" "}
+                        <button
+                          onClick={() =>
+                            librarian.userName === "admin"
+                              ? alert(
+                                  "You cannot change the admin user password."
+                                )
+                              : handleOpenChangeDialog(librarian.id)
+                          }
+                        >
+                          {librarian.userName === "admin" ? (
+                            <AiFillLock size={30} />
+                          ) : (
+                            <Button>Change</Button>
+                          )}
+                        </button>
+                      </td>
+                      <td>
+                        <button className="edit">
+                          {librarian.userName === "admin" ? (
+                            <AiFillLock size={30} />
+                          ) : (
+                            <Link
+                              to={`/librarians-edit/${librarian.id}`}
+                              key={librarian.id}
+                            >
+                              <MdModeEditOutline size={30} />
+                            </Link>
+                          )}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="delete"
+                          onClick={() =>
+                            librarian.userName !== "admin"
+                              ? handleDelete(librarian.userName, librarian.id)
+                              : alert("You cannot delete an admin user.")
+                          }
+                        >
+                          {librarian.userName === "admin" ? (
+                            <AiFillLock size={30} />
+                          ) : (
+                            <AiFillDelete size={30} />
+                          )}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-5">
+                Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
+                Showing {res?.data.pageSize} results per page
+              </p>
+              <div>
+                {res?.data.totalPages > res?.data.pageNo + 1 && (
+                  <Button onClick={nextPage} className="me-3">
+                    Next Page
+                  </Button>
+                )}
+                {res?.data.pageNo > 0 && (
+                  <Button onClick={previousPage}>Previous Page</Button>
+                )}
+              </div>
+            </>
+          ) : (
             <div>
-              {res?.data.totalPages > res?.data.pageNo + 1 && (
-                <Button onClick={nextPage} className="me-3">
-                  Next Page
-                </Button>
-              )}
-              {res?.data.pageNo > 0 && (
-                <Button onClick={previousPage}>Previous Page</Button>
+              {isLoading ? (
+                <Spinner name="Puff" />
+              ) : (
+                "No results have been found"
               )}
             </div>
-          </>
-        ) : (
-          <div>
-            {isLoading ? <Spinner name="Puff" /> : "No results have been found"}
-          </div>
-        )}
+          )}
 
-        {/* Dialog Change Password  */}
+          {/* Dialog Change Password  */}
 
-        <Modal show={showChangePasswordDialog} onHide={handleCloseChangeDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Change Password</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <label>Password:</label>
-            <FormControl
-              placeholder="Enter the new password..."
-              className="mb-3"
-              type="password"
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <label>Repeat password:</label>
-            <FormControl
-              placeholder="Enter the repeat password..."
-              type="password"
-              autoComplete="new-password"
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseChangeDialog}>
-              Cancel
-            </Button>
-            <Button className="save" onClick={handleConfirmChange}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          <Modal
+            show={showChangePasswordDialog}
+            onHide={handleCloseChangeDialog}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Change Password</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <label>Password:</label>
+              <FormControl
+                placeholder="Enter the new password..."
+                className="mb-3"
+                type="password"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <label>Repeat password:</label>
+              <FormControl
+                placeholder="Enter the repeat password..."
+                type="password"
+                autoComplete="new-password"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseChangeDialog}>
+                Cancel
+              </Button>
+              <Button className="save" onClick={handleConfirmChange}>
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
-        <Modal show={showErrorDialog} onHide={() => setShowErrorDialog(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{errorMsg}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowErrorDialog(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          <Modal
+            show={showErrorDialog}
+            onHide={() => setShowErrorDialog(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Error</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>{errorMsg}</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="primary"
+                onClick={() => setShowErrorDialog(false)}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -15,6 +15,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
 import "../../../style/list.css"
 import Spinner from "../../../components/animations/Spinner";
+import Swal from "sweetalert2";
 
 const CustomersType = () => {
   // States to manage type data
@@ -124,6 +125,11 @@ const CustomersType = () => {
       .then((res) => {
         setTypsPage(res.data);
         setPageLoading(false);
+        Swal.fire({
+          title: "Type successfully added",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch((error) => {
         setShowErrorDialog(true);
@@ -176,6 +182,11 @@ const CustomersType = () => {
         setTypsPage(res.data);
         setPageLoading(false);
         setSelectedTypeId(0);
+        Swal.fire({
+          title: "Type successfully save",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch((error) => {
         setShowErrorDialog(true);
@@ -198,6 +209,11 @@ const CustomersType = () => {
         .then((res) => {
           setTypsPage(res.data);
           setPageLoading(false);
+          Swal.fire({
+            title: "Deleted successfully",
+            icon: "success",
+            timer: 2000,
+          });
         })
         .catch((error) => {
           setShowErrorDialog(true);
@@ -212,8 +228,8 @@ const CustomersType = () => {
 
   return (
     <div className="container mt-3">
-      <div className="d-flex flex-column">
-        <div className="d-flex">
+      <div className="flex flex-col">
+        <div className="flex">
           <div className="flex flex-col">
             <div className="flex items-center">
               <button

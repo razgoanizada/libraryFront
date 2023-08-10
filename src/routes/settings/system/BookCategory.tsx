@@ -15,6 +15,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
 import "../../../style/list.css"
 import Spinner from "../../../components/animations/Spinner";
+import Swal from "sweetalert2";
 
 const BookCategory = () => {
   // States to manage category data
@@ -100,6 +101,11 @@ const BookCategory = () => {
       .then((res) => {
         setCategoriesPage(res.data);
         setPageLoading(false);
+        Swal.fire({
+          title: "Category successfully added",
+          icon: "success",
+          timer: 3000,
+        });
       })
       .catch((error) => {
         setShowErrorDialog(true);
@@ -135,6 +141,11 @@ const BookCategory = () => {
         setPageLoading(false);
         setSelectedCategoryId(0);
         setSelectedCategoryName("");
+        Swal.fire({
+          title: "Category successfully save",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch((error) => {
         setShowErrorDialog(true);
@@ -157,6 +168,11 @@ const BookCategory = () => {
         .then((res) => {
           setCategoriesPage(res.data);
           setPageLoading(false);
+          Swal.fire({
+            title: "Deleted successfully",
+            icon: "success",
+            timer: 2000,
+          });
         })
         .catch((error) => {
           setShowErrorDialog(true);
@@ -171,8 +187,8 @@ const BookCategory = () => {
 
   return (
     <div className="container mt-3">
-      <div className="d-flex flex-column">
-        <div className="d-flex">
+      <div className="flex flex-col">
+        <div className="flex">
           <div className="flex flex-col">
             <div className="flex items-center">
               <button
@@ -187,7 +203,7 @@ const BookCategory = () => {
             </div>
           </div>
 
-          <InputGroup className="search d-flex ms-5">
+          <InputGroup className="search flex ms-5">
             <FormControl
               placeholder="Search categories..."
               value={searchQuery}

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { logout } from "../service/auth-service";
-import { Navigate } from "react-router";
+
 const baseUrl = "http://localhost:8081/api/v1";
 
 const client = axios.create({ baseURL: baseUrl });
@@ -11,6 +11,7 @@ const onFailure = (error: any) => {
   const errorMessage = error?.response?.data?.message;
   if(errorMessage == "Expired") {
     logout()
+   
   }
 
   throw new Error(error?.response?.data?.detail || "Unknown error occurred");
