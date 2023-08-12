@@ -98,7 +98,7 @@ export interface BookCategoriesPage {
     creationDate: Date;
   }
 
-  export interface Books {
+  export interface Book {
     id: number;
     name: string;
     author: string;
@@ -109,6 +109,16 @@ export interface BookCategoriesPage {
     addedByUserName: string;
     creationDate: Date;
     borrows: Borrows[]
+  }
+
+  export interface BooksPage {
+    results: Book[];
+    totalPages: number;
+    totalBooks: number;
+    isFirst: boolean;
+    isLast: boolean;
+    pageNo: number;
+    pageSize: number;
   }
 
   export interface Borrows {

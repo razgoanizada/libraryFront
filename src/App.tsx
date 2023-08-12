@@ -19,7 +19,9 @@ import Logs from "./routes/settings/system/Logs";
 import Librarians from "./routes/settings/librarians/Librarians";
 import LibrariansDetails from "./routes/settings/librarians/LibrariansDetails";
 import LibrariansEdit from "./routes/settings/librarians/LibrariansEdit.";
-import { Helmet } from "react-helmet";
+import Books from "./routes/models/books/Books";
+import BooksEdit from "./routes/models/books/BooksEdit.";
+import BooksDetails from "./routes/models/books/BookDetails";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -35,6 +37,11 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/books" element={<Books />} />
+                <Route
+                      path="/books/:id"
+                      element={<BooksDetails />}
+                    />
                 <Route path="/customers" element={<Customers />} />
                 <Route path="/customers-add" element={<AddCustomer />} />
               </>
@@ -68,19 +75,27 @@ const App = () => {
                     />
                     <Route path="/books-category" element={<Unauthorized />} />
                     <Route path="/customers-type" element={<Unauthorized />} />
-                    <Route path="/lods" element={<Unauthorized />} />
+                    <Route path="/logs" element={<Unauthorized />} />
                   </>
                 )}
                 ;
                 {HasPermission("pro") && (
                   <>
                     <Route path="/books-add" element={<AddBook />} />
+                    <Route
+                      path="/books-edit/:id"
+                      element={<BooksEdit />}
+                    />
                   </>
                 )}
                 ;
                 {!HasPermission("pro") && (
                   <>
                     <Route path="/books-add" element={<Unauthorized />} />
+                    <Route
+                      path="/books-edit/:id"
+                      element={<Unauthorized />}
+                    />
                   </>
                 )}
                 ;

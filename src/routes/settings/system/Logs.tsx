@@ -9,6 +9,7 @@ import "../../../style/list.css";
 import Spinner from "../../../components/animations/Spinner";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Helmet } from "react-helmet";
 
 const Logs = () => {
   // States to manage log data
@@ -75,6 +76,10 @@ const Logs = () => {
   const isLoading = pageLoading || !res;
 
   return (
+    <>
+    <Helmet>
+        <title>Logs</title>
+      </Helmet>
     <div className="container mt-3">
       <div className="flex flex-col">
         <div className="flex">
@@ -165,6 +170,7 @@ const Logs = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

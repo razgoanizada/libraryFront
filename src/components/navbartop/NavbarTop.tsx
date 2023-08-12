@@ -45,17 +45,17 @@ const NavbarTop = () => {
               id="navbarScrollingDropdown"
               className=""
             >
-              <NavDropdown.Item href="#action/3.1">
-                List of books
-              </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
                 List of customers
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/books">
+                List of books
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">
                 Add a new customer
               </NavDropdown.Item>
               {HasPermission("pro") && (
-                <NavDropdown.Item href="#action/3.3">
+                <NavDropdown.Item href="/books-add">
                   Add a new book
                 </NavDropdown.Item>
               )}
@@ -119,7 +119,7 @@ const NavbarTop = () => {
             </NavDropdown>
             <h6 className="links col-lg-4 col-xl-3 col-xxl-2">{userName}</h6>
 
-            <span className="clock col-2">
+            <span className="mx-2 clock col-2">
               <Clock />
             </span>
           </Nav>

@@ -5,6 +5,7 @@ import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
 import { LibrarianAdd } from "../../../service/library-service";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const AddLibrarian = () => {
   const nav = useNavigate();
@@ -59,6 +60,10 @@ const AddLibrarian = () => {
   };
 
   return (
+    <>
+     <Helmet>
+        <title>Add Librarian</title>
+      </Helmet>
     <Formik
       validationSchema={validationSchema}
       initialValues={intiailValues}
@@ -331,6 +336,7 @@ const AddLibrarian = () => {
         )}
       </Form>
     </Formik>
+    </>
   );
 };
 

@@ -1,7 +1,11 @@
 import { request } from "../utils/axios-interceptors";
 
-
 // Book Categories
+export const BooksCategories = () =>
+  request({
+    url: `/books-categories`,
+  });
+
 export const BookCategoriesRequest = (pageNo: number, name: string) =>
   request({
     url: `/books-categories/page?pageNo=${pageNo}&name=${name}`,
@@ -19,13 +23,13 @@ export const BookCategoriesAdd = (categoryName: string) =>
     },
   });
 
-  export const BookCategoriesDelete = (id: number) =>
+export const BookCategoriesDelete = (id: number) =>
   request({
     url: `/books-categories/${id}`,
     method: "delete",
   });
 
-  export const BookCategoriesUpdate = (categoryName: string, id: number) =>
+export const BookCategoriesUpdate = (categoryName: string, id: number) =>
   request({
     url: `/books-categories/${id}`,
     method: "PUT",
@@ -37,15 +41,19 @@ export const BookCategoriesAdd = (categoryName: string) =>
     },
   });
 
+// Customer Type
 
-  // Customer Type
-
-  export const CustomerTypeRequest = (pageNo: number, name: string, days: string, amount: string) =>
+export const CustomerTypeRequest = (
+  pageNo: number,
+  name: string,
+  days: string,
+  amount: string
+) =>
   request({
     url: `/customer-type/page?pageNo=${pageNo}&name=${name}&days=${days}&amount=${amount}`,
   });
 
-  export const CustomerTypeAdd = (name: string, days: number, amount: number) =>
+export const CustomerTypeAdd = (name: string, days: number, amount: number) =>
   request({
     url: `/customer-type/add`,
     method: "POST",
@@ -55,17 +63,17 @@ export const BookCategoriesAdd = (categoryName: string) =>
     data: {
       name: name,
       days: days,
-      amount: amount
+      amount: amount,
     },
   });
 
-  export const CustomerTypeDelete = (id: number) =>
+export const CustomerTypeDelete = (id: number) =>
   request({
     url: `/customer-type/${id}`,
     method: "delete",
   });
 
-  export const CustomerTypeUpdate = (days: number, amount: number, id: number) =>
+export const CustomerTypeUpdate = (days: number, amount: number, id: number) =>
   request({
     url: `/customer-type/${id}`,
     method: "PUT",
@@ -74,39 +82,56 @@ export const BookCategoriesAdd = (categoryName: string) =>
     },
     data: {
       days: days,
-      amount: amount
+      amount: amount,
     },
   });
 
-  // logs
+// logs
 
-  export const LogsRequest = (pageNo: number, username: string, isLogin: boolean, dateStart: string, dateEnd: string) =>
+export const LogsRequest = (
+  pageNo: number,
+  username: string,
+  isLogin: boolean,
+  dateStart: string,
+  dateEnd: string
+) =>
   request({
     url: `/logs/page?pageNo=${pageNo}&userName=${username}&isLogin=${isLogin}&DateStart=${dateStart}&DateEnd=${dateEnd}`,
   });
 
-  // librarians
+// librarians
 
-  export const LibrariansRequest = (
-    pageNo: number, permission: string, firstName: string, lastName: string, phone: string, tz: string, userName: string) =>
+export const Librarians = () => request({ url: `/librarians` });
+
+export const LibrariansRequest = (
+  pageNo: number,
+  permission: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  tz: string,
+  userName: string
+) =>
   request({
-    url: 
-    `/librarians/page?pageNo=${pageNo}&permission=${permission}&firstName=${firstName}&lastName=${lastName}&phone=${phone}&tz=${tz}&userName=${userName}`,
+    url: `/librarians/page?pageNo=${pageNo}&permission=${permission}&firstName=${firstName}&lastName=${lastName}&phone=${phone}&tz=${tz}&userName=${userName}`,
   });
 
-  export const LibrariansDelete = (id: number) =>
+export const LibrariansDelete = (id: number) =>
   request({
     url: `/librarians/${id}`,
     method: "delete",
   });
 
-  export const LibrarianIDRequest = (id: any) =>
+export const LibrarianIDRequest = (id: any) =>
   request({
-    url: 
-    `/librarians/${id}`,
+    url: `/librarians/${id}`,
   });
 
-  export const LibrarianChangePassword = (newPassword: string, repeatNewPassword: string, id: number) =>
+export const LibrarianChangePassword = (
+  newPassword: string,
+  repeatNewPassword: string,
+  id: number
+) =>
   request({
     url: `/librarians/change-password/${id}`,
     method: "PUT",
@@ -115,13 +140,23 @@ export const BookCategoriesAdd = (categoryName: string) =>
     },
     data: {
       newPassword: newPassword,
-      repeatNewPassword: repeatNewPassword
+      repeatNewPassword: repeatNewPassword,
     },
   });
 
-  export const LibrarianAdd = (
-    firstName: string, lastName: string, userName: string, password: string, 
-    emai: string, phone: string, tz: string, address: string, dateOfBirth: Date, gender: string, permission: string) =>
+export const LibrarianAdd = (
+  firstName: string,
+  lastName: string,
+  userName: string,
+  password: string,
+  emai: string,
+  phone: string,
+  tz: string,
+  address: string,
+  dateOfBirth: Date,
+  gender: string,
+  permission: string
+) =>
   request({
     url: `/librarians/add`,
     method: "POST",
@@ -139,12 +174,20 @@ export const BookCategoriesAdd = (categoryName: string) =>
       address: address,
       dateOfBirth: dateOfBirth,
       gender: gender,
-      permission: permission
+      permission: permission,
     },
   });
 
-  export const LibrarianUpdate = (firstName: string, lastName: string, phone: string,
-     address: string, dateOfBirth: Date, gender: string, permission: string, id: number) =>
+export const LibrarianUpdate = (
+  firstName: string,
+  lastName: string,
+  phone: string,
+  address: string,
+  dateOfBirth: Date,
+  gender: string,
+  permission: string,
+  id: number
+) =>
   request({
     url: `/librarians/${id}`,
     method: "PUT",
@@ -158,19 +201,92 @@ export const BookCategoriesAdd = (categoryName: string) =>
       address: address,
       dateOfBirth: dateOfBirth,
       phone: phone,
-      permission: permission
+      permission: permission,
     },
   });
 
-  export const BorrowsLibrarian = (addedBy: any) => request ({
-    url: `/borrow/page?pageSize=${5}&addedBy=${addedBy}`
-  })
+//books
 
-  export const CustomersLibrarian = (addedBy: any) => request ({
-    url: `/customers/page?pageSize=${5}&addedBy=${addedBy}`
-  })
+export const BooksRequest = (
+  pageNo: number,
+  name: string,
+  author: string,
+  publishYear: string,
+  bookcase: string,
+  bookCategories: string,
+  addedBy: string
+) =>
+  request({
+    url: `/books/page?pageNo=${pageNo}&name=${name}&author=${author}&publishYear=${publishYear}&bookcase=${bookcase}&bookCategories=${bookCategories}&addedBy=${addedBy}`,
+  });
 
-  export const BooksLibrarian = (addedBy: any) => request ({
-    url: `/books/page?pageSize=${5}&addedBy=${addedBy}`
-  })
+export const BooksDelete = (id: number) =>
+  request({
+    url: `/books/${id}`,
+    method: "delete",
+  });
 
+  export const BookAdd = (
+    name: string,
+    author: string,
+    publishYear: string,
+    description: string,
+    bookcase: string,
+    bookCategoriesName: string,
+  ) =>
+    request({
+      url: `/books/add`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        name: name,
+        author: author,
+        publishYear: publishYear,
+        description: description,
+        bookcase: bookcase,
+        bookCategoriesName: bookCategoriesName
+      },
+    });
+
+    export const BookIDRequest = (id: any) =>
+  request({
+    url: `/books/${id}`,
+  });
+
+  export const BookUpdate = (
+    description: string,
+    bookcase: string,
+    bookCategoriesName: string,
+    id: number
+  ) =>
+    request({
+      url: `/books/${id}`,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        description: description,
+        bookcase: bookcase,
+        bookCategoriesName: bookCategoriesName,
+      },
+    });
+
+// librarian details
+
+export const BorrowsLibrarian = (addedBy: any) =>
+  request({
+    url: `/borrow/page?pageSize=${5}&addedBy=${addedBy}`,
+  });
+
+export const CustomersLibrarian = (addedBy: any) =>
+  request({
+    url: `/customers/page?pageSize=${5}&addedBy=${addedBy}`,
+  });
+
+export const BooksLibrarian = (addedBy: any) =>
+  request({
+    url: `/books/page?pageSize=${5}&addedBy=${addedBy}`,
+  });

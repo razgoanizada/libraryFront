@@ -16,6 +16,7 @@ import { LuSearch } from "react-icons/lu";
 import "../../../style/list.css"
 import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const BookCategory = () => {
   // States to manage category data
@@ -186,6 +187,10 @@ const BookCategory = () => {
   const isLoading = pageLoading || !res;
 
   return (
+    <>
+    <Helmet>
+        <title>Book category</title>
+      </Helmet>
     <div className="container mt-3">
       <div className="flex flex-col">
         <div className="flex">
@@ -338,6 +343,7 @@ const BookCategory = () => {
         </Modal>
       </div>
     </div>
+    </>
   );
 };
 

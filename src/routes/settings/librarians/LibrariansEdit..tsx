@@ -2,12 +2,12 @@ import { useNavigate, useParams } from "react-router";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useQuery } from "react-query";
 import { LibrarianIDRequest, LibrarianUpdate } from "../../../service/library-service";
-import NotFound from "../../general/NotFound";
 import * as Yup from "yup";
 import { Librarian } from "../../../@Typs";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import Spinner from "../../../components/animations/Spinner";
+import { Helmet } from "react-helmet";
 
 const LibrariansEdit = () => {
   const { id } = useParams();
@@ -49,6 +49,10 @@ const LibrariansEdit = () => {
     };
     
     return (
+      <>
+      <Helmet>
+        <title>{librarian.userName}</title>
+      </Helmet>
     <Formik
     validationSchema={validationSchema}
     initialValues={intiailValues}
@@ -244,6 +248,7 @@ const LibrariansEdit = () => {
       )}
     </Form>
   </Formik>
+  </>
   )}
 
   else {

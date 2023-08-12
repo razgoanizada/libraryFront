@@ -1,18 +1,16 @@
 import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import {
-  BooksLibrarian,
+  BookIDRequest,
   BorrowsLibrarian,
   CustomersLibrarian,
-  LibrarianIDRequest,
 } from "../../../service/library-service";
-import { Book, Borrows, Customers, Librarian } from "../../../@Typs";
-import format from "date-fns/format";
+import { Book, Borrows, Customers } from "../../../@Typs";
 import { Helmet } from "react-helmet";
 
-const LibrariansDetails = () => {
+const BooksDetails = () => {
   const { id } = useParams();
-  const { data: res } = useQuery("get librarian", () => LibrarianIDRequest(id));
+  const { data: res } = useQuery("get book", () => BookIDRequest(id));
   const { data: resBorrows } = useQuery("get borrows", () =>
     BorrowsLibrarian(id)
   );
@@ -20,66 +18,46 @@ const LibrariansDetails = () => {
     CustomersLibrarian(id)
   );
 
-  const { data: resBooks } = useQuery("get books", () => BooksLibrarian(id));
-  const librarian: Librarian | undefined = res?.data;
+  const book: Book | undefined = res?.data;
 
-  if (librarian?.userName) {
+  if (book?.name) {
     return (
       <>
       <Helmet>
-        <title>{librarian.userName}</title>
+        <title>{book.name}</title>
       </Helmet>
       <div className="bg-white shadow-md rounded-lg my-2 mx-auto p-4 flex flex-col gap-2">
         <div className="mx-5">
-          <h1 className="text-center w-11/12">{librarian.userName}</h1>
+          <h1 className="text-center w-11/12">{book.name}</h1>
           <table className="w-11/12">
-            {/* <img src={librarian.image} alt="sdsd" /> */}
+           
             <tr>
-              <th className="bg-white">Name: </th>
-              <td>
-                {librarian.firstName} {librarian.lastName}
-              </td>
+              <th className="bg-white">Author: </th>
+              <td>{book.author} </td>
             </tr>
             <tr>
-              <th className="bg-white">Email: </th>
-              <td>{librarian.email} </td>
+              <th className="bg-white">Publish year: </th>
+              <td>{book.publishYear} </td>
             </tr>
             <tr>
-              <th className="bg-white">Phone: </th>
-              <td>{librarian.phone} </td>
+              <th className="bg-white">Description: </th>
+              <td>{book.description} </td>
             </tr>
             <tr>
-              <th className="bg-white">ID: </th>
-              <td>{librarian.tz} </td>
+              <th className="bg-white">Bookcase: </th>
+              <td>{book.bookcase} </td>
             </tr>
             <tr>
-              <th className="bg-white">Gender: </th>
-              <td>{librarian.gender.toString()} </td>
+              <th className="bg-white">Category: </th>
+              <td>{book.bookCategoriesName} </td>
             </tr>
             <tr>
-              <th className="bg-white">Address: </th>
-              <td>{librarian.address} </td>
+              <th className="bg-white">Added by: </th>
+              <td>{book.addedByUserName} </td>
             </tr>
             <tr>
-              <th className="bg-white">Date of birth: </th>
-              <td>{librarian.dateOfBirth.toString()} </td>
-            </tr>
-            <tr>
-              <th className="bg-white">Created on: </th>
-              <td>{librarian.creationDate.toString()} </td>
-            </tr>
-            <tr>
-              <th className="bg-white">Permission: </th>
-              <td>{librarian.permission} </td>
-            </tr>
-            <tr>
-              <th className="bg-white">Last : </th>
-              <td>
-                {" "}
-                {librarian.lastLogin
-                  ? format(new Date(librarian.lastLogin), "yyyy-MM-dd HH:mm:ss")
-                  : "Does not exist"}{" "}
-              </td>
+              <th className="bg-white">Added on: </th>
+              <td>{book.creationDate.toString()} </td>
             </tr>
           </table>
           <h2 className="p-3 mt-3 font-thin">
@@ -156,35 +134,12 @@ const LibrariansDetails = () => {
               <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
             </span>
           </h2>
-          {resBooks?.data.totalBooks > 0 ? (
-            <table className="mt-4 w-11/12">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Phone</th>
-                  <th>Creation date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resBooks?.data.results.map((book: Book) => (
-                  <tr key={book.id}>
-                    <td>{book.name}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <h5 className="mt-4 text-center w-11/12">
-              There are no books to display
-            </h5>
-          )}
         </div>
       </div>
       </>
     );
   }
 
-  return <div>No Such Librarian</div>;
+  return <div>No Such Book</div>;
 };
-export default LibrariansDetails;
+export default BooksDetails;

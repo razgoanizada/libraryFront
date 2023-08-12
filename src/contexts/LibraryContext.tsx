@@ -4,6 +4,7 @@ import {
   CustomerTypePage,
   LogPage,
   LibrariansPage,
+  BooksPage,
 } from "../@Typs";
 
 interface LibraryContextState {
@@ -15,6 +16,8 @@ interface LibraryContextState {
   setLogsPage: (logsPage: LogPage[]) => void;
   librariansPage: LibrariansPage[];
   setLibrariansPage: (librariansPage: LibrariansPage[]) => void;
+  booksPage: BooksPage[];
+  setBooksPage: (booksPage: BooksPage[]) => void;
 }
 
 const initialState: LibraryContextState = {
@@ -26,6 +29,8 @@ const initialState: LibraryContextState = {
   setLogsPage: () => {},
   librariansPage: [],
   setLibrariansPage: () => {},
+  booksPage: [],
+  setBooksPage: () => {},
 };
 
 //create context
@@ -43,6 +48,7 @@ export const LibraryContextProvider = ({
   const [typsPage, setTypsPage] = useState<CustomerTypePage[]>([]);
   const [logsPage, setLogsPage] = useState<LogPage[]>([]);
   const [librariansPage, setLibrariansPage] = useState<LibrariansPage[]>([]);
+  const [booksPage, setBooksPage] = useState<BooksPage[]>([]);
 
   return (
     <LibraryContext.Provider
@@ -55,6 +61,8 @@ export const LibraryContextProvider = ({
         setLogsPage,
         librariansPage,
         setLibrariansPage,
+        booksPage,
+        setBooksPage,
       }}
     >
       {children}

@@ -257,7 +257,7 @@ const Librarians = () => {
                     onChange={(e) => setPermission(e.target.value)}
                   >
                     <option value={""} className="bg-stone-500">
-                      Select
+                      Select Permission
                     </option>
                     <option value={"3"}>Simple</option>
                     <option value={"2"}>Pro</option>
@@ -350,7 +350,9 @@ const Librarians = () => {
                         </button>
                       </td>
                       <td>
-                        <button className="edit">
+                        <button className="edit"
+                        onClick={() => 
+                        librarian.userName === "admin" && alert("You cannot edit an admin user.")}>
                           {librarian.userName === "admin" ? (
                             <AiFillLock size={30} />
                           ) : (
