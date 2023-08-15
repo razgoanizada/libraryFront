@@ -159,28 +159,34 @@ const BookCategory = () => {
 
   // Function to handle category deletion
   const handleDelete = (categoryName: string, categoryId: any) => {
-    setCurrentPage(0);
     setPageLoading(true);
-    const confirmation = window.confirm(
-      `Are you sure you want to delete ${categoryName}?`
-    );
-    if (confirmation) {
-      BookCategoriesDelete(categoryId)
-        .then((res) => {
-          setCategoriesPage(res.data);
-          setPageLoading(false);
-          Swal.fire({
-            title: "Deleted successfully",
-            icon: "success",
-            timer: 2000,
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Are you sure you want to delete the ${categoryName} category?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        BookCategoriesDelete(categoryId)
+          .then((res) => {
+            setCategoriesPage(res.data);
+            setPageLoading(false);
+            Swal.fire({
+              title: "Deleted successfully",
+              icon: "success",
+              timer: 2000,
+            });
+          })
+          .catch((error) => {
+            setShowErrorDialog(true);
+            setErrorMsg(error.message);
+            setPageLoading(false);
           });
-        })
-        .catch((error) => {
-          setShowErrorDialog(true);
-          setErrorMsg(error.message);
-          setPageLoading(false);
-        });
-    }
+      }
+    });
   };
 
   // Determine if the data is still loading

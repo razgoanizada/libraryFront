@@ -3,10 +3,7 @@ import * as Yup from "yup";
 import { useState } from "react";
 import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
-import {
-  BookAdd,
-  BooksCategories,
-} from "../../../service/library-service";
+import { BookAdd, BooksCategories } from "../../../service/library-service";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
@@ -14,7 +11,6 @@ import { BookCategories } from "../../../@Typs";
 
 const AddBook = () => {
   const nav = useNavigate();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data: resBookCategories } = useQuery("get categories", () =>
@@ -59,7 +55,6 @@ const AddBook = () => {
           category,
         }) => {
           setLoading(true); //show progress spinner
-          setError(""); //new round - clean slate
 
           BookAdd(
             name,
@@ -69,7 +64,7 @@ const AddBook = () => {
             bookcase.toString(),
             category
           )
-            .then((res) => {
+            .then(() => {
               Swal.fire({
                 title: "Book successfully added",
                 icon: "success",
@@ -79,7 +74,11 @@ const AddBook = () => {
               nav("/books");
             })
             .catch((error) => {
-              setError(error.message);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: error.message,
+              });
             })
             .finally(() => {
               setLoading(false);
@@ -205,11 +204,6 @@ const AddBook = () => {
               Save
             </button>
           </div>
-          {error && (
-            <p className="text-red-500 flex justify-center w-fit mx-auto px-10 py-5 mt-4 rounded-3xl italic shadow-md">
-              {error}
-            </p>
-          )}
         </Form>
       </Formik>
     </>

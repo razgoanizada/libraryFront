@@ -17,7 +17,6 @@ const BooksEdit = () => {
   const { id } = useParams();
   const { data: res } = useQuery("get book", () => BookIDRequest(id));
   const nav = useNavigate();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const book: Book | undefined = res?.data;
 
@@ -48,7 +47,6 @@ const BooksEdit = () => {
           initialValues={intiailValues}
           onSubmit={({ description, bookcase, category }) => {
             setLoading(true); //show progress spinner
-            setError(""); //new round - clean slate
 
             BookUpdate(description, bookcase, category, book?.id)
               .then(() => {
@@ -61,7 +59,11 @@ const BooksEdit = () => {
                 nav("/books");
               })
               .catch((error) => {
-                setError(error.message);
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: error.message,
+                });
               })
               .finally(() => {
                 setLoading(false);
@@ -136,11 +138,6 @@ const BooksEdit = () => {
                 Save
               </button>
             </div>
-            {error && (
-              <p className="text-red-500 flex justify-center w-fit mx-auto px-10 py-5 mt-4 rounded-3xl italic shadow-md">
-                {error}
-              </p>
-            )}
           </Form>
         </Formik>
       </>

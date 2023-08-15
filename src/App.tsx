@@ -22,6 +22,9 @@ import LibrariansEdit from "./routes/settings/librarians/LibrariansEdit.";
 import Books from "./routes/models/books/Books";
 import BooksEdit from "./routes/models/books/BooksEdit.";
 import BooksDetails from "./routes/models/books/BookDetails";
+import CustomersEdit from "./routes/models/customers/CustomersEdit";
+import CustomerDetails from "./routes/models/customers/CustomerDetails";
+import ChangePassword from "./routes/general/ChangePassword";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -38,12 +41,12 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/books" element={<Books />} />
-                <Route
-                      path="/books/:id"
-                      element={<BooksDetails />}
-                    />
+                <Route path="/books/:id" element={<BooksDetails />} />
                 <Route path="/customers" element={<Customers />} />
                 <Route path="/customers-add" element={<AddCustomer />} />
+                <Route path="/customers-edit/:id" element={<CustomersEdit />} />
+                <Route path="/customers/:id" element={<CustomerDetails />} />
+                <Route path="/change-password" element={<ChangePassword />} />
               </>
               <>
                 {HasPermission("admin") && (
@@ -82,20 +85,14 @@ const App = () => {
                 {HasPermission("pro") && (
                   <>
                     <Route path="/books-add" element={<AddBook />} />
-                    <Route
-                      path="/books-edit/:id"
-                      element={<BooksEdit />}
-                    />
+                    <Route path="/books-edit/:id" element={<BooksEdit />} />
                   </>
                 )}
                 ;
                 {!HasPermission("pro") && (
                   <>
                     <Route path="/books-add" element={<Unauthorized />} />
-                    <Route
-                      path="/books-edit/:id"
-                      element={<Unauthorized />}
-                    />
+                    <Route path="/books-edit/:id" element={<Unauthorized />} />
                   </>
                 )}
                 ;

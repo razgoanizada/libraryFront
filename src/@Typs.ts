@@ -81,7 +81,7 @@ export interface BookCategoriesPage {
     pageSize: number;
   }
   
-  export interface Customers {
+  export interface Customer {
     id: number;
     firstName: string;
     lastName: string;
@@ -96,6 +96,16 @@ export interface BookCategoriesPage {
     active: boolean;
     dateOfBirth: Date;
     creationDate: Date;
+  }
+
+  export interface CustomersPage {
+    results: Customer[];
+    totalPages: number;
+    totalCustomers: number;
+    isFirst: boolean;
+    isLast: boolean;
+    pageNo: number;
+    pageSize: number;
   }
 
   export interface Book {

@@ -45,13 +45,13 @@ const NavbarTop = () => {
               id="navbarScrollingDropdown"
               className=""
             >
-              <NavDropdown.Item href="#action/3.2">
+              <NavDropdown.Item href="/customers">
                 List of customers
               </NavDropdown.Item>
               <NavDropdown.Item href="/books">
                 List of books
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="/customers-add">
                 Add a new customer
               </NavDropdown.Item>
               {HasPermission("pro") && (
@@ -81,12 +81,13 @@ const NavbarTop = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
+
             <NavDropdown
               title={userName}
               id="navbarScrollingDropdown"
               className="d-lg-none"
             >
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="/change-password">
                 Change password
               </NavDropdown.Item>
               <NavDropdown.Item href="/" onClick={logout}>
@@ -110,7 +111,7 @@ const NavbarTop = () => {
               }
               id="navbarScrollingDropdown"
             >
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="/change-password">
                 Change password
               </NavDropdown.Item>
               <NavDropdown.Item href="/" onClick={logout}>

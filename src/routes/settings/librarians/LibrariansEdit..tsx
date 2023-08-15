@@ -13,7 +13,6 @@ const LibrariansEdit = () => {
   const { id } = useParams();
   const { data: res } = useQuery("get typs", () => LibrarianIDRequest(id));
   const nav = useNavigate();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const librarian: Librarian | undefined = res?.data;
 
@@ -66,8 +65,7 @@ const LibrariansEdit = () => {
       permission,
     }) => {
       setLoading(true); //show progress spinner
-      setError(""); //new round - clean slate
-
+     
       const formattedDateOfBirth = new Date(dateOfBirth);
       LibrarianUpdate(
         firstName,
@@ -89,7 +87,11 @@ const LibrariansEdit = () => {
           nav("/librarians");
         })
         .catch((error) => {
-          setError(error.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.message,
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -241,11 +243,6 @@ const LibrariansEdit = () => {
           Save
         </button>
       </div>
-      {error && (
-        <p className="text-red-500 flex justify-center w-fit mx-auto px-10 py-5 mt-4 rounded-3xl italic shadow-md">
-          {error}
-        </p>
-      )}
     </Form>
   </Formik>
   </>

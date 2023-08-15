@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
-import { BooksRequest, BooksDelete, BooksCategories, Librarians } from "../../../service/library-service";
+import {
+  BooksRequest,
+  BooksDelete,
+  BooksCategories,
+  Librarians,
+} from "../../../service/library-service";
 import { Book, BookCategories, Librarian } from "../../../@Typs";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
@@ -31,11 +36,11 @@ const Books = () => {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   const { data: resBookCategories } = useQuery("get categories", () =>
-  BooksCategories()
+    BooksCategories()
   );
 
   const { data: resLibrarians } = useQuery("get librarians", () =>
-  Librarians()
+    Librarians()
   );
 
   // Fetching books from the server
@@ -100,28 +105,34 @@ const Books = () => {
 
   // Function to handle book deletion
   const handleDelete = (name: string, bookId: any) => {
-    setCurrentPage(0);
     setPageLoading(true);
-    const confirmation = window.confirm(
-      `Are you sure you want to delete ${name}?`
-    );
-    if (confirmation) {
-      BooksDelete(bookId)
-        .then((res) => {
-          setBooksPage(res.data);
-          setPageLoading(false);
-          Swal.fire({
-            title: "Deleted successfully",
-            icon: "success",
-            timer: 2000,
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Are you sure you want to delete the ${name} book?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        BooksDelete(bookId)
+          .then((res) => {
+            setBooksPage(res.data);
+            setPageLoading(false);
+            Swal.fire({
+              title: "Deleted successfully",
+              icon: "success",
+              timer: 2000,
+            });
+          })
+          .catch((error) => {
+            setShowErrorDialog(true);
+            setErrorMsg(error.message);
+            setPageLoading(false);
           });
-        })
-        .catch((error) => {
-          setShowErrorDialog(true);
-          setErrorMsg(error.message);
-          setPageLoading(false);
-        });
-    }
+      }
+    });
   };
 
   // Determine if the data is still loading

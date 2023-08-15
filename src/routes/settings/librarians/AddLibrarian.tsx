@@ -9,7 +9,6 @@ import { Helmet } from "react-helmet";
 
 const AddLibrarian = () => {
   const nav = useNavigate();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const validationSchema = Yup.object({
@@ -81,7 +80,6 @@ const AddLibrarian = () => {
         permission,
       }) => {
         setLoading(true); //show progress spinner
-        setError(""); //new round - clean slate
 
         if (tz.length < 9) {
           // Add leading zeros to tz until it has 9 digits
@@ -102,7 +100,7 @@ const AddLibrarian = () => {
           gender,
           permission
         )
-          .then((res) => {
+          .then(() => {
             Swal.fire({
               title: "Librarian successfully added",
               icon: "success",
@@ -112,8 +110,11 @@ const AddLibrarian = () => {
             nav("/librarians");
           })
           .catch((error) => {
-            // console.log(error.response.data);
-            setError(error.message);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.message,
+            })
           })
           .finally(() => {
             setLoading(false);
@@ -329,11 +330,6 @@ const AddLibrarian = () => {
             Save
           </button>
         </div>
-        {error && (
-          <p className="text-red-500 flex justify-center w-fit mx-auto px-10 py-5 mt-4 rounded-3xl italic shadow-md">
-            {error}
-          </p>
-        )}
       </Form>
     </Formik>
     </>

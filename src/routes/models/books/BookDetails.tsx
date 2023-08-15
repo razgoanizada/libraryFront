@@ -5,7 +5,7 @@ import {
   BorrowsLibrarian,
   CustomersLibrarian,
 } from "../../../service/library-service";
-import { Book, Borrows, Customers } from "../../../@Typs";
+import { Book, Borrows, Customer } from "../../../@Typs";
 import { Helmet } from "react-helmet";
 
 const BooksDetails = () => {
@@ -57,7 +57,7 @@ const BooksDetails = () => {
             </tr>
             <tr>
               <th className="bg-white">Added on: </th>
-              <td>{book.creationDate.toString()} </td>
+              <td>{book.creationDate ? book.creationDate.toString() : ""} </td>
             </tr>
           </table>
           <h2 className="p-3 mt-3 font-thin">
@@ -110,7 +110,7 @@ const BooksDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {resCustomers?.data.results.map((customer: Customers) => (
+                {resCustomers?.data.results.map((customer: Customer) => (
                   <tr key={customer.id}>
                     <td>
                       {customer.firstName} {customer.lastName}

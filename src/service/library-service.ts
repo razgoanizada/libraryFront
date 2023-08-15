@@ -43,6 +43,8 @@ export const BookCategoriesUpdate = (categoryName: string, id: number) =>
 
 // Customer Type
 
+export const CustomersType = () => request({ url: `/customer-type` });
+
 export const CustomerTypeRequest = (
   pageNo: number,
   name: string,
@@ -226,53 +228,139 @@ export const BooksDelete = (id: number) =>
     method: "delete",
   });
 
-  export const BookAdd = (
-    name: string,
-    author: string,
-    publishYear: string,
-    description: string,
-    bookcase: string,
-    bookCategoriesName: string,
-  ) =>
-    request({
-      url: `/books/add`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        name: name,
-        author: author,
-        publishYear: publishYear,
-        description: description,
-        bookcase: bookcase,
-        bookCategoriesName: bookCategoriesName
-      },
-    });
+export const BookAdd = (
+  name: string,
+  author: string,
+  publishYear: string,
+  description: string,
+  bookcase: string,
+  bookCategoriesName: string
+) =>
+  request({
+    url: `/books/add`,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      name: name,
+      author: author,
+      publishYear: publishYear,
+      description: description,
+      bookcase: bookcase,
+      bookCategoriesName: bookCategoriesName,
+    },
+  });
 
-    export const BookIDRequest = (id: any) =>
+export const BookIDRequest = (id: any) =>
   request({
     url: `/books/${id}`,
   });
 
-  export const BookUpdate = (
-    description: string,
-    bookcase: string,
-    bookCategoriesName: string,
-    id: number
-  ) =>
-    request({
-      url: `/books/${id}`,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        description: description,
-        bookcase: bookcase,
-        bookCategoriesName: bookCategoriesName,
-      },
-    });
+export const BookUpdate = (
+  description: string,
+  bookcase: string,
+  bookCategoriesName: string,
+  id: number
+) =>
+  request({
+    url: `/books/${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      description: description,
+      bookcase: bookcase,
+      bookCategoriesName: bookCategoriesName,
+    },
+  });
+
+// customers
+export const CustomersRequest = (
+  pageNo: number,
+  customerType: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  tz: string,
+  addedBy: string,
+  isActive: boolean
+) =>
+  request({
+    url: `/customers/page?pageNo=${pageNo}&customerType=${customerType}&firstName=${firstName}&lastName=${lastName}&phone=${phone}&tz=${tz}&addedBy=${addedBy}&isActive=${isActive}`,
+  });
+
+export const CustomerAdd = (
+  firstName: string,
+  lastName: string,
+  emai: string,
+  phone: string,
+  tz: string,
+  gender: string,
+  address: string,
+  dateOfBirth: Date,
+  type: string
+) =>
+  request({
+    url: `/customers/add`,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      firstName: firstName,
+      lastName: lastName,
+      email: emai,
+      phone: phone,
+      tz: tz,
+      gender: gender,
+      address: address,
+      dateOfBirth: dateOfBirth,
+      customerTypeName: type,
+    },
+  });
+
+export const CustomerUpdate = (
+  firstName: string,
+  lastName: string,
+  phone: string,
+  gender: string,
+  address: string,
+  dateOfBirth: Date,
+  type: string,
+  id: number
+) =>
+  request({
+    url: `/customers/${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      gender: gender,
+      address: address,
+      dateOfBirth: dateOfBirth,
+      customerTypeName: type,
+    },
+  });
+
+export const CustomerActive = (id: number) =>
+  request({
+    url: `/customers/active/${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const CustomerIDRequest = (id: any) =>
+  request({
+    url: `/customers/${id}`,
+  });
 
 // librarian details
 
@@ -289,4 +377,19 @@ export const CustomersLibrarian = (addedBy: any) =>
 export const BooksLibrarian = (addedBy: any) =>
   request({
     url: `/books/page?pageSize=${5}&addedBy=${addedBy}`,
+  });
+
+// general
+
+export const AuthChangePassword = (password: string, repeatPassword: string) =>
+  request({
+    url: `/change-password`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      newPassword: password,
+      repeatNewPassword: repeatPassword,
+    },
   });
