@@ -1,12 +1,11 @@
 import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import {
-  BookIDRequest,
   BorrowsLibrarian,
   CustomerIDRequest,
   CustomersLibrarian,
 } from "../../../service/library-service";
-import { Book, Borrows, Customer } from "../../../@Typs";
+import { Borrow, Customer } from "../../../@Typs";
 import { Helmet } from "react-helmet";
 
 const CustomerDetails = () => {
@@ -90,7 +89,7 @@ const CustomerDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {resBorrows?.data.results.map((borrow: Borrows) => (
+                {resBorrows?.data.results.map((borrow: Borrow) => (
                   <tr key={borrow.id}>
                     <td>{borrow.id} </td>
                     <td></td>

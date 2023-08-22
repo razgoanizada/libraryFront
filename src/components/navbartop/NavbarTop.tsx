@@ -27,16 +27,13 @@ const NavbarTop = () => {
               id="navbarScrollingDropdown"
               className=""
             >
-              <NavDropdown.Item href="#action/3.1">
+              <NavDropdown.Item href="/borrow-add">
                 Borrow a book
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
-                Return a book
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
+              <NavDropdown.Item href="/borrowed">
                 The list of borrow books
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
+              <NavDropdown.Item href="/overdue">
                 Overdue book list
               </NavDropdown.Item>
             </NavDropdown>

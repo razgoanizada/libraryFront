@@ -6,14 +6,14 @@ import {
   CustomersLibrarian,
   LibrarianIDRequest,
 } from "../../../service/library-service";
-import { Book, Borrows, Customer, Librarian } from "../../../@Typs";
+import { Book, Borrow, Customer, Librarian } from "../../../@Typs";
 import format from "date-fns/format";
 import { Helmet } from "react-helmet";
 
 const LibrariansDetails = () => {
   const { id } = useParams();
   const { data: res } = useQuery("get librarian", () => LibrarianIDRequest(id));
-  const { data: resBorrows } = useQuery("get borrows", () =>
+  const { data: resBorrows } = useQuery("get borrowed", () =>
     BorrowsLibrarian(id)
   );
   const { data: resCustomers } = useQuery("get customers", () =>
@@ -99,7 +99,7 @@ const LibrariansDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {resBorrows?.data.results.map((borrow: Borrows) => (
+                {resBorrows?.data.results.map((borrow: Borrow) => (
                   <tr key={borrow.id}>
                     <td>{borrow.id} </td>
                     <td></td>

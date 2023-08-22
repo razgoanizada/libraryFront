@@ -18,10 +18,9 @@ import Spinner from "../../../components/animations/Spinner";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
-import { HasPermission } from "../../../utils/HasPermission";
 
 const Customers = () => {
-  // States to manage librarian data
+  // States to manage customer data
   const { setCustomersPage } = useContext(LibraryContext);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
@@ -41,7 +40,7 @@ const Customers = () => {
     Librarians()
   );
 
-  // Fetching books from the server
+  // Fetching customers from the server
   const { data: res } = useQuery(
     "get customers",
     () =>
@@ -76,7 +75,7 @@ const Customers = () => {
     }
   };
 
-  // Update book data when response is received from the server
+  // Update customer data when response is received from the server
   useEffect(() => {
     if (res && res.data) {
       setCustomersPage(res.data);
@@ -84,7 +83,7 @@ const Customers = () => {
     }
   }, [currentPage, res]);
 
-  // Function to handle book search
+  // Function to handle customer search
   const handleSearch = () => {
     setCurrentPage(0);
     setPageLoading(true);
@@ -152,19 +151,17 @@ const Customers = () => {
         <div className="flex flex-column">
           <div className="flex">
             <div className="flex flex-col">
-              {HasPermission("pro") && (
-                <div className="flex items-center">
-                  <Link
-                    to="/customers-add"
-                    className="add btn-primary py-2 px-2 rounded-lg"
-                  >
-                    <div className="flex items-center text-black">
-                      <CgAdd className="w-6 h-6" />
-                      <span className="ml-2">Add</span>
-                    </div>
-                  </Link>
-                </div>
-              )}
+              <div className="flex items-center">
+                <Link
+                  to="/customers-add"
+                  className="add btn-primary py-2 px-2 rounded-lg"
+                >
+                  <div className="flex items-center text-black">
+                    <CgAdd className="w-6 h-6" />
+                    <span className="ml-2">Add</span>
+                  </div>
+                </Link>
+              </div>
             </div>
             <InputGroup className="search row ms-5">
               <div className="search-bar">

@@ -25,6 +25,9 @@ import BooksDetails from "./routes/models/books/BookDetails";
 import CustomersEdit from "./routes/models/customers/CustomersEdit";
 import CustomerDetails from "./routes/models/customers/CustomerDetails";
 import ChangePassword from "./routes/general/ChangePassword";
+import Borrowed from "./routes/borrow/Borrowed ";
+import Overdue from "./routes/borrow/Overdu";
+import AddBorrow from "./routes/borrow/AddBorrow";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -47,6 +50,9 @@ const App = () => {
                 <Route path="/customers-edit/:id" element={<CustomersEdit />} />
                 <Route path="/customers/:id" element={<CustomerDetails />} />
                 <Route path="/change-password" element={<ChangePassword />} />
+                <Route path="/borrowed" element={<Borrowed />} />
+                <Route path="/overdue" element={<Overdue />} />
+                <Route path="/borrow-add" element={<AddBorrow />} />
               </>
               <>
                 {HasPermission("admin") && (

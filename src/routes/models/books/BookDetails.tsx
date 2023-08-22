@@ -5,7 +5,7 @@ import {
   BorrowsLibrarian,
   CustomersLibrarian,
 } from "../../../service/library-service";
-import { Book, Borrows, Customer } from "../../../@Typs";
+import { Book, Borrow, Customer } from "../../../@Typs";
 import { Helmet } from "react-helmet";
 
 const BooksDetails = () => {
@@ -77,7 +77,7 @@ const BooksDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {resBorrows?.data.results.map((borrow: Borrows) => (
+                {resBorrows?.data.results.map((borrow: Borrow) => (
                   <tr key={borrow.id}>
                     <td>{borrow.id} </td>
                     <td></td>

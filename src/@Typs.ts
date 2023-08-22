@@ -92,7 +92,7 @@ export interface BookCategoriesPage {
     address: string;
     customerTypeName: string;
     addedByUserName: string;
-    borrows: Borrows[]
+    borrows: Borrow[]
     active: boolean;
     dateOfBirth: Date;
     creationDate: Date;
@@ -118,7 +118,7 @@ export interface BookCategoriesPage {
     bookCategoriesName: string;
     addedByUserName: string;
     creationDate: Date;
-    borrows: Borrows[]
+    borrows: Borrow[]
   }
 
   export interface BooksPage {
@@ -131,13 +131,23 @@ export interface BookCategoriesPage {
     pageSize: number;
   }
 
-  export interface Borrows {
+  export interface Borrow {
     id: number;
     customerId: number;
     bookId: number;
     borrowingDate: Date;
     returnDate: Date;
-    retrievedOn: Date;
+    returnedOn: Date;
     returnBook: boolean;
    addedByUserName: string;
+  }
+
+  export interface BorrowedPage {
+    results: Borrow[];
+    totalPages: number;
+    totalBorrowed: number;
+    isFirst: boolean;
+    isLast: boolean;
+    pageNo: number;
+    pageSize: number;
   }

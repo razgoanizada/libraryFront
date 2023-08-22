@@ -208,6 +208,7 @@ export const LibrarianUpdate = (
   });
 
 //books
+export const Books = () => request({ url: `/books` });
 
 export const BooksRequest = (
   pageNo: number,
@@ -277,6 +278,8 @@ export const BookUpdate = (
   });
 
 // customers
+export const Customers = () => request({ url: `/customers` });
+
 export const CustomersRequest = (
   pageNo: number,
   customerType: string,
@@ -377,6 +380,57 @@ export const CustomersLibrarian = (addedBy: any) =>
 export const BooksLibrarian = (addedBy: any) =>
   request({
     url: `/books/page?pageSize=${5}&addedBy=${addedBy}`,
+  });
+
+// borrow
+
+export const BorrowRequest = (
+  pageNo: number,
+  customerId: string,
+  bookId: string,
+  addedBy: string,
+  returnBook: boolean,
+  borrowingDateStart: string,
+  borrowingDateEnd: string,
+  returnDateStart: string,
+  returnDateEnd: string
+) =>
+  request({
+    url: `/borrow/page?pageNo=${pageNo}&customerId=${customerId}&bookId=${bookId}&addedBy=${addedBy}&returnBook=${returnBook}&borrowingDateStart=${borrowingDateStart}&borrowingDateEnd=${borrowingDateEnd}&returnDateStart=${returnDateStart}&returnDateEnd=${returnDateEnd}`,
+  });
+
+  export const hasReturnBook = (id: number) =>
+  request({
+    url: `/borrow/return-book/${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  export const ExtraTime = (id: number, days: number) =>
+  request({
+    url: `/borrow/extra-time/${id}`,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      days: days,
+    },
+  });
+
+  export const BorrowAdd = (customerId: number, bookId: number) =>
+  request({
+    url: `/borrow/add`,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      customerId: customerId,
+      bookId: bookId
+    },
   });
 
 // general

@@ -59,7 +59,6 @@ const Logs = () => {
     setCurrentPage(0);
     setPageLoading(true);
     
-
     LogsRequest(0, username, isLogin, dateStart, dateEnd).then((res) => {
       setLogsPage(res.data);
       setPageLoading(false);
