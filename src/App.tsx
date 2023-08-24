@@ -28,6 +28,7 @@ import ChangePassword from "./routes/general/ChangePassword";
 import Borrowed from "./routes/borrow/Borrowed ";
 import Overdue from "./routes/borrow/Overdu";
 import AddBorrow from "./routes/borrow/AddBorrow";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -115,6 +116,7 @@ const App = () => {
           ;
         </>
       </Routes>
+      {isLoggedIn && <Footer />}
     </>
   );
 };

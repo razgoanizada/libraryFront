@@ -12,6 +12,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import Spinner from "../../../components/animations/Spinner";
 import { Helmet } from "react-helmet";
+import { City } from "../../../service/address";
 
 const CustomersEdit = () => {
   const { id } = useParams();
@@ -21,6 +22,8 @@ const CustomersEdit = () => {
   const customer: Customer | undefined = res?.data;
 
   const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
+
+  const {data: resCity } = useQuery("get city", () => City());
 
   if (customer?.firstName) {
     const validationSchema = Yup.object({
@@ -34,7 +37,7 @@ const CustomersEdit = () => {
         .required("Last name is a required field"),
       phone: Yup.string().min(9).max(11).required(),
       gender: Yup.string().required(),
-      address: Yup.string().max(20),
+      address: Yup.string(),
       dateOfBirth: Yup.date().max(
         new Date(),
         "Date of birth should be in the past"
@@ -160,23 +163,6 @@ const CustomersEdit = () => {
               </div>
 
               <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-                <label htmlFor="address">Address:</label>
-                <Field
-                  className=" px-2 py-1 rounded-md border-blue-300 border-2"
-                  placeholder="Address..."
-                  name="address"
-                  type="text"
-                  id="address"
-                />
-                {/* error message for the input */}
-                <ErrorMessage
-                  name="address"
-                  component="div"
-                  className="text-red-500"
-                />
-              </div>
-
-              <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
                 <label htmlFor="type">Type:</label>
                 <Field
                   className=" px-2 py-1 rounded-md border-blue-300 border-2"
@@ -200,6 +186,33 @@ const CustomersEdit = () => {
                   className="text-red-500"
                 />
               </div>
+
+              <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="address">City:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="City..."
+                name="address"
+                as="select"
+                id="address"
+              >
+                <option value={""} className="bg-stone-500">
+                  Select City
+                </option>
+                {resCity?.data.result.records.map((city: any) => (
+                 (city.city_name_en != " " &&(
+                  <option value={city._id}>{city.city_name_en}</option>
+                 ))
+                ))}
+              </Field>
+
+              {/* error message for the input */}
+              <ErrorMessage
+                name="address"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
               <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
                 <label htmlFor="gender">Gender:</label>

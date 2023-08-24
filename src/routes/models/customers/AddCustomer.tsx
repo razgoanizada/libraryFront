@@ -8,12 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { CustomerType } from "../../../@Typs";
+import { City } from "../../../service/address";
 
 const AddCustomer = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
+
+  const {data: resCity } = useQuery("get city", () => City());
 
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -30,7 +33,7 @@ const AddCustomer = () => {
       .matches(/^\d{9}$/, "ID card must have 9 digits")
       .required("ID is a required field"),
     gender: Yup.string().required(),
-    address: Yup.string().max(20),
+    address: Yup.string(),
     dateOfBirth: Yup.date().max(
       new Date(),
       "Date of birth should be in the past"
@@ -199,23 +202,6 @@ const AddCustomer = () => {
             </div>
 
             <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-              <label htmlFor="address">Address:</label>
-              <Field
-                className=" px-2 py-1 rounded-md border-blue-300 border-2"
-                placeholder="Address..."
-                name="address"
-                type="text"
-                id="address"
-              />
-              {/* error message for the input */}
-              <ErrorMessage
-                name="address"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="type">Type:</label>
               <Field
                 className=" px-2 py-1 rounded-md border-blue-300 border-2"
@@ -235,6 +221,33 @@ const AddCustomer = () => {
               {/* error message for the input */}
               <ErrorMessage
                 name="type"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="address">City:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="City..."
+                name="address"
+                as="select"
+                id="address"
+              >
+                <option value={""} className="bg-stone-500">
+                  Select City
+                </option>
+                {resCity?.data.result.records.map((city: any) => (
+                 (city.city_name_en != " " &&(
+                  <option value={city._id}>{city.city_name_en}</option>
+                 ))
+                ))}
+              </Field>
+
+              {/* error message for the input */}
+              <ErrorMessage
+                name="address"
                 component="div"
                 className="text-red-500"
               />

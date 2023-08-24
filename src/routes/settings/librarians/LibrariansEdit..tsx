@@ -8,6 +8,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import Spinner from "../../../components/animations/Spinner";
 import { Helmet } from "react-helmet";
+import { City } from "../../../service/address";
 
 const LibrariansEdit = () => {
   const { id } = useParams();
@@ -15,6 +16,8 @@ const LibrariansEdit = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const librarian: Librarian | undefined = res?.data;
+
+  const {data: resCity } = useQuery("get city", () => City());
 
   if (librarian?.userName && librarian.userName !== "admin" ) {
 
@@ -154,21 +157,31 @@ const LibrariansEdit = () => {
         </div>
 
         <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-          <label htmlFor="address">Address:</label>
-          <Field
-            className=" px-2 py-1 rounded-md border-blue-300 border-2"
-            placeholder="Address..."
-            name="address"
-            type="text"
-            id="address"
-          />
-          {/* error message for the input */}
-          <ErrorMessage
-            name="address"
-            component="div"
-            className="text-red-500"
-          />
-        </div>
+              <label htmlFor="address">City:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="City..."
+                name="address"
+                as="select"
+                id="address"
+              >
+                <option value={""} className="bg-stone-500">
+                  Select City
+                </option>
+                {resCity?.data.result.records.map((city: any) => (
+                 (city.city_name_en != " " &&(
+                  <option value={city._id}>{city.city_name_en}</option>
+                 ))
+                ))}
+              </Field>
+
+              {/* error message for the input */}
+              <ErrorMessage
+                name="address"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
         <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
           <label htmlFor="permission">Permission:</label>
