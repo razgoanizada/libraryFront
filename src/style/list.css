@@ -55,6 +55,14 @@ th {
   background-color: green;
 }
 
+.pdf-col svg {
+ fill: red;
+}
+
+.export-button svg {
+  fill: rgb(36, 128, 0);
+}
+
 @media (max-width: 991px) {
  
   .col-none {

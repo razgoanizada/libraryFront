@@ -37,3 +37,25 @@
   }
 }
 
+.circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  transition: transform 0.3s, background-color 0.3s;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  border: 2px solid #fff; 
+}
+
+.circle:hover {
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.pdf {
+  height: 90vh;
+}
+
+
+
+

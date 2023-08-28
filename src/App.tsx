@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "./contexts/AuthContext";
 import Home from "./routes/general/Home";
 import NotFound from "./routes/general/NotFound";
@@ -29,6 +29,8 @@ import Borrowed from "./routes/borrow/Borrowed ";
 import Overdue from "./routes/borrow/Overdu";
 import AddBorrow from "./routes/borrow/AddBorrow";
 import Footer from "./components/footer/Footer";
+import { PDFViewer } from "@react-pdf/renderer";
+import BorrowPDF from "./components/file/BorrowPDF";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -54,6 +56,14 @@ const App = () => {
                 <Route path="/borrowed" element={<Borrowed />} />
                 <Route path="/overdue" element={<Overdue />} />
                 <Route path="/borrow-add" element={<AddBorrow />} />
+                <Route
+                  path="/borrow-pdf/:id"
+                  element={
+                   
+                      <BorrowPDF />
+                    
+                  }
+                />
               </>
               <>
                 {HasPermission("admin") && (
@@ -72,8 +82,7 @@ const App = () => {
                     <Route path="/customers-type" element={<CustomersType />} />
                     <Route path="/logs" element={<Logs />} />
                   </>
-                )}
-                ;
+                )};
                 {!HasPermission("admin") && (
                   <>
                     <Route path="/librarians" element={<Unauthorized />} />
@@ -116,6 +125,7 @@ const App = () => {
           ;
         </>
       </Routes>
+
       {isLoggedIn && <Footer />}
     </>
   );

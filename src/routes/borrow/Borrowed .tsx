@@ -19,9 +19,11 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
 import DatePicker from "react-datepicker";
+import { BsFilePdf } from "react-icons/bs";
+import BorrowedExcel from "../../components/file/BorrowedExcel";
 
 const Borrowed = () => {
-  // States to manage librarian data
+  // States to manage borrow data
   const { setBorrowedPage } = useContext(LibraryContext);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
@@ -42,8 +44,8 @@ const Borrowed = () => {
   const [days, setDays] = useState<number | "">("");
   const [selectedBorrowId, setSelectedBorrowId] = useState<number>(0);
 
-  const { data: resBooks } = useQuery("get books", () => Books());
   const { data: resCustomers } = useQuery("get customers", () => Customers());
+  const { data: resBooks } = useQuery("get books", () => Books());
 
   const { data: resLibrarians } = useQuery("get librarians", () =>
     Librarians()
@@ -85,7 +87,7 @@ const Borrowed = () => {
     }
   };
 
-  // Update book data when response is received from the server
+  // Update borrow data when response is received from the server
   useEffect(() => {
     if (res && res.data) {
       setBorrowedPage(res.data);
@@ -93,7 +95,7 @@ const Borrowed = () => {
     }
   }, [currentPage, res]);
 
-  // Function to handle book search
+  // Function to handle borrow search
   const handleSearch = () => {
     setCurrentPage(0);
     setPageLoading(true);
@@ -111,6 +113,18 @@ const Borrowed = () => {
       setBorrowedPage(res.data);
       setPageLoading(false);
     });
+  };
+
+  const handleReset = () => {
+    setBorrowingDateStart("");
+    setBorrowingDateEnd("");
+    setReturnDateStart("");
+    setReturnDateEnd("");
+    setBookId("");
+    setCustomerId("");
+    setAddedBy("");
+    setReturnBook(false);
+    handleSearch();
   };
 
   const handleReturnBook = (borrowId: any) => {
@@ -143,7 +157,7 @@ const Borrowed = () => {
     });
   };
 
-  // Functions to manage Edit Change Password dialog
+  // Functions to manage Edit Extra days dialog
   const handleOpenExtraDialog = (borrowId: number) => {
     setSelectedBorrowId(borrowId);
     setShowExtraTimeDialog(true);
@@ -201,7 +215,6 @@ const Borrowed = () => {
       <Helmet>
         <title>Borrowed</title>
       </Helmet>
-
       <div className="container mt-3">
         <div className="flex flex-column">
           <div className="flex">
@@ -251,38 +264,36 @@ const Borrowed = () => {
                     dateFormat="yyyy-MM-dd"
                     placeholderText="End date of borrowing"
                   />
-                 <div className="flex mx-5">
-                 <DatePicker
-                    className="form-control d-none d-lg-flex"
-                    selected={
-                      returnDateStart !== ""
-                        ? new Date(returnDateStart)
-                        : null
-                    }
-                    onChange={(date) =>
-                      setReturnDateStart(
-                        date ? date.toISOString().split("T")[0] : ""
-                      )
-                    }
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText="Start date of return."
-                  />{" "}
-                  <DatePicker
-                    className="form-control d-none d-lg-flex"
-                    selected={
-                      returnDateEnd !== ""
-                        ? new Date(returnDateEnd)
-                        : null
-                    }
-                    onChange={(date) =>
-                      setReturnDateEnd(
-                        date ? date.toISOString().split("T")[0] : ""
-                      )
-                    }
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText="End date of return"
-                  />
-                 </div>
+                  <div className="flex mx-5">
+                    <DatePicker
+                      className="form-control d-none d-lg-flex"
+                      selected={
+                        returnDateStart !== ""
+                          ? new Date(returnDateStart)
+                          : null
+                      }
+                      onChange={(date) =>
+                        setReturnDateStart(
+                          date ? date.toISOString().split("T")[0] : ""
+                        )
+                      }
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="Start date of return."
+                    />{" "}
+                    <DatePicker
+                      className="form-control d-none d-lg-flex"
+                      selected={
+                        returnDateEnd !== "" ? new Date(returnDateEnd) : null
+                      }
+                      onChange={(date) =>
+                        setReturnDateEnd(
+                          date ? date.toISOString().split("T")[0] : ""
+                        )
+                      }
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="End date of return"
+                    />
+                  </div>
                 </div>
                 <div className="flex col-11 mt-3">
                   <FormControl
@@ -332,9 +343,7 @@ const Borrowed = () => {
                       <option value={librarian.id}>{librarian.userName}</option>
                     ))}
                   </FormControl>
-                  <div className="flex align-items-center mx-4">
-                    Returned:
-                  </div>
+                  <div className="flex align-items-center mx-4">Returned:</div>
                   <FormControl
                     as="select"
                     placeholder="Returned ?"
@@ -354,17 +363,7 @@ const Borrowed = () => {
                   <Button
                     variant="secondary"
                     className="d-none d-lg-flex"
-                    onClick={() => {
-                      setBorrowingDateStart("")
-                      setBorrowingDateEnd("")
-                      setReturnDateStart("")
-                      setReturnDateEnd("")
-                      setBookId("")
-                      setCustomerId("")
-                      setAddedBy("");
-                      setReturnBook(false)
-                      handleSearch();
-                    }}
+                    onClick={handleReset}
                   >
                     Reset
                   </Button>
@@ -375,6 +374,9 @@ const Borrowed = () => {
 
           {res?.data.totalBorrowed > 0 ? (
             <>
+              <div className="export-button">
+                <BorrowedExcel data={res?.data.results} />
+              </div>
               <table className="mt-4">
                 <thead>
                   <tr>
@@ -386,6 +388,7 @@ const Borrowed = () => {
                     <th className="col-none">Librarian</th>
                     <th className="col-none">Returned?</th>
                     <th className="col-none">Returned on</th>
+                    <th>PDF</th>
                     <th className="col-none">Extra time</th>
                     <th>Return a book</th>
                   </tr>
@@ -451,6 +454,12 @@ const Borrowed = () => {
                           ? borrow.returnedOn.toString()
                           : "not returned"}{" "}
                       </td>
+
+                      <td className="pdf-col">
+                        <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
+                          <BsFilePdf size={30} />
+                        </Link>
+                      </td>
                       <td className="col-none">
                         {!borrow.returnBook ? (
                           <button
@@ -462,6 +471,7 @@ const Borrowed = () => {
                           ""
                         )}
                       </td>
+
                       <td>
                         {!borrow.returnBook ? (
                           <button onClick={() => handleReturnBook(borrow.id)}>

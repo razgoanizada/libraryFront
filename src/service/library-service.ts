@@ -384,6 +384,8 @@ export const BooksLibrarian = (addedBy: any) =>
 
 // borrow
 
+export const Borrow = () => request({ url: `/borrow` });
+
 export const BorrowRequest = (
   pageNo: number,
   customerId: string,
@@ -431,6 +433,11 @@ export const BorrowRequest = (
       customerId: customerId,
       bookId: bookId
     },
+  });
+
+  export const BorrowIDRequest = (id: any) =>
+  request({
+    url: `/borrow/${id}`,
   });
 
 // general
