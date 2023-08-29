@@ -8,19 +8,20 @@ import {
   Customers,
   hasReturnBook,
   ExtraTime,
+  Borrow,
 } from "../../service/library-service";
-import { Customer, Librarian, Borrow, Book } from "../../@Typs";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
-import { LuSearch } from "react-icons/lu";
 import "../../style/list.css";
 import Spinner from "../../components/animations/Spinner";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
-import DatePicker from "react-datepicker";
-import { BsFilePdf } from "react-icons/bs";
 import BorrowedExcel from "../../components/file/BorrowedExcel";
+import ErrorDialog from "../../components/dialogues/ErrorDialog";
+import ExtraTimeDialog from "../../components/dialogues/ExtraTimeDialog";
+import BorrowedTable from "../../components/table/BorrowedTable ";
+import PaginationButtons from "../../components/table/PaginationButtons";
+import BorrowSearch from "../../components/search/BorrowSearch";
 
 const Borrowed = () => {
   // States to manage borrow data
@@ -44,12 +45,7 @@ const Borrowed = () => {
   const [days, setDays] = useState<number | "">("");
   const [selectedBorrowId, setSelectedBorrowId] = useState<number>(0);
 
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
-  const { data: resBooks } = useQuery("get books", () => Books());
-
-  const { data: resLibrarians } = useQuery("get librarians", () =>
-    Librarians()
-  );
+  const { data: resAllBorrow } = useQuery("get all borrow", () => Borrow());
 
   // Fetching borrow from the server
   const { data: res } = useQuery(
@@ -149,8 +145,8 @@ const Borrowed = () => {
             });
           })
           .catch((error) => {
-            setShowErrorDialog(true);
             setErrorMsg(error.message);
+            setShowErrorDialog(true);
             setPageLoading(false);
           });
       }
@@ -231,274 +227,50 @@ const Borrowed = () => {
                 </Link>
               </div>
             </div>
-            <InputGroup className="search row ms-5">
-              <div className="search-bar">
-                <div className="flex col-10">
-                  <DatePicker
-                    className="form-control d-none d-lg-flex"
-                    selected={
-                      borrowingDateStart !== ""
-                        ? new Date(borrowingDateStart)
-                        : null
-                    }
-                    onChange={(date) =>
-                      setBorrowingDateStart(
-                        date ? date.toISOString().split("T")[0] : ""
-                      )
-                    }
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText="Start date of borrowing"
-                  />
-                  <DatePicker
-                    className="form-control d-none d-lg-flex"
-                    selected={
-                      borrowingDateEnd !== ""
-                        ? new Date(borrowingDateEnd)
-                        : null
-                    }
-                    onChange={(date) =>
-                      setBorrowingDateEnd(
-                        date ? date.toISOString().split("T")[0] : ""
-                      )
-                    }
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText="End date of borrowing"
-                  />
-                  <div className="flex mx-5">
-                    <DatePicker
-                      className="form-control d-none d-lg-flex"
-                      selected={
-                        returnDateStart !== ""
-                          ? new Date(returnDateStart)
-                          : null
-                      }
-                      onChange={(date) =>
-                        setReturnDateStart(
-                          date ? date.toISOString().split("T")[0] : ""
-                        )
-                      }
-                      dateFormat="yyyy-MM-dd"
-                      placeholderText="Start date of return."
-                    />{" "}
-                    <DatePicker
-                      className="form-control d-none d-lg-flex"
-                      selected={
-                        returnDateEnd !== "" ? new Date(returnDateEnd) : null
-                      }
-                      onChange={(date) =>
-                        setReturnDateEnd(
-                          date ? date.toISOString().split("T")[0] : ""
-                        )
-                      }
-                      dateFormat="yyyy-MM-dd"
-                      placeholderText="End date of return"
-                    />
-                  </div>
-                </div>
-                <div className="flex col-11 mt-3">
-                  <FormControl
-                    as="select"
-                    placeholder="select"
-                    className="d-none d-lg-flex mx-2"
-                    value={bookId}
-                    onChange={(e) => setBookId(e.target.value)}
-                  >
-                    <option value={""} className="bg-stone-500">
-                      Select Book
-                    </option>
-                    {resBooks?.data.map((book: Book) => (
-                      <option value={book.id}>{book.name}</option>
-                    ))}
-                  </FormControl>
-
-                  <FormControl
-                    as="select"
-                    placeholder="select"
-                    className="d-none d-lg-flex mx-2"
-                    value={customerId}
-                    onChange={(e) => setCustomerId(e.target.value)}
-                  >
-                    <option value={""} className="bg-stone-500">
-                      Select Customer
-                    </option>
-                    {resCustomers?.data.map((customer: Customer) => (
-                      <option value={customer.id}>
-                        {customer.firstName} {customer.lastName} ({customer.tz})
-                      </option>
-                    ))}
-                  </FormControl>
-
-                  <FormControl
-                    as="select"
-                    placeholder="select"
-                    className="d-none d-lg-flex mx-2"
-                    value={addedBy}
-                    onChange={(e) => setAddedBy(e.target.value)}
-                  >
-                    <option value={""} className="bg-stone-500">
-                      Select Added by
-                    </option>
-
-                    {resLibrarians?.data.map((librarian: Librarian) => (
-                      <option value={librarian.id}>{librarian.userName}</option>
-                    ))}
-                  </FormControl>
-                  <div className="flex align-items-center mx-4">Returned:</div>
-                  <FormControl
-                    as="select"
-                    placeholder="Returned ?"
-                    value={returnBook.toString()}
-                    onChange={handleIsReturned}
-                  >
-                    <option value={"true"}>Yes</option>
-                    <option value={"false"}>No</option>
-                  </FormControl>
-                  <Button
-                    variant="btn-search"
-                    onClick={handleSearch}
-                    className="search-icon"
-                  >
-                    <LuSearch size={30} />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="d-none d-lg-flex"
-                    onClick={handleReset}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </InputGroup>
+            <BorrowSearch
+              borrowingDateStart={borrowingDateStart}
+              setBorrowingDateStart={setBorrowingDateStart}
+              borrowingDateEnd={borrowingDateEnd}
+              setBorrowingDateEnd={setBorrowingDateEnd}
+              returnDateStart={returnDateStart}
+              setReturnDateStart={setReturnDateStart}
+              returnDateEnd={returnDateEnd}
+              setReturnDateEnd={setReturnDateEnd}
+              bookId={bookId}
+              setBookId={setBookId}
+              customerId={customerId}
+              setCustomerId={setCustomerId}
+              addedBy={addedBy}
+              setAddedBy={setAddedBy}
+              returnBook={returnBook}
+              handleIsReturned={handleIsReturned}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+            />
           </div>
 
           {res?.data.totalBorrowed > 0 ? (
             <>
               <div className="export-button">
-                <BorrowedExcel data={res?.data.results} />
+                <BorrowedExcel data={resAllBorrow?.data} />
               </div>
-              <table className="mt-4">
-                <thead>
-                  <tr>
-                    <th className="col-none">Number</th>
-                    <th>Book</th>
-                    <th>Customer</th>
-                    <th className="col-none">Borrowed on</th>
-                    <th className="col-none">Return date</th>
-                    <th className="col-none">Librarian</th>
-                    <th className="col-none">Returned?</th>
-                    <th className="col-none">Returned on</th>
-                    <th>PDF</th>
-                    <th className="col-none">Extra time</th>
-                    <th>Return a book</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {res?.data.results.map((borrow: Borrow) => (
-                    <tr key={borrow.id}>
-                      <td className="col-none">{borrow.id}</td>
-                      <td>
-                        {resBooks?.data.find(
-                          (book: Book) => book.id === borrow.bookId
-                        ) ? (
-                          <Link to={`/books/${borrow.bookId}`}>
-                            {
-                              resBooks.data.find(
-                                (book: Book) => book.id === borrow.bookId
-                              ).name
-                            }
-                          </Link>
-                        ) : (
-                          "The book has been deleted"
-                        )}
-                      </td>
-                      <td>
-                        {resCustomers?.data.find(
-                          (customer: Customer) =>
-                            customer.id === borrow.customerId
-                        ) ? (
-                          <Link to={`/customers/${borrow.customerId}`}>
-                            {
-                              resCustomers.data.find(
-                                (customer: Customer) =>
-                                  customer.id === borrow.customerId
-                              ).firstName
-                            }{" "}
-                            {
-                              resCustomers.data.find(
-                                (customer: Customer) =>
-                                  customer.id === borrow.customerId
-                              ).lastName
-                            }
-                          </Link>
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                      <td className="col-none">
-                        {" "}
-                        {borrow.borrowingDate.toString()}{" "}
-                      </td>
-                      <td className="col-none">
-                        {" "}
-                        {borrow.returnDate.toString()}{" "}
-                      </td>
-                      <td className="col-none"> {borrow.addedByUserName} </td>
-                      <td className="col-none">
-                        {" "}
-                        {borrow.returnBook ? "Yes" : "No"}{" "}
-                      </td>
-                      <td className="col-none">
-                        {" "}
-                        {borrow.returnedOn
-                          ? borrow.returnedOn.toString()
-                          : "not returned"}{" "}
-                      </td>
 
-                      <td className="pdf-col">
-                        <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
-                          <BsFilePdf size={30} />
-                        </Link>
-                      </td>
-                      <td className="col-none">
-                        {!borrow.returnBook ? (
-                          <button
-                            onClick={() => handleOpenExtraDialog(borrow.id)}
-                          >
-                            <Button>Extra </Button>
-                          </button>
-                        ) : (
-                          ""
-                        )}
-                      </td>
+              <BorrowedTable
+                borrowedData={res?.data.results}
+                handleReturnBook={handleReturnBook}
+                handleOpenExtraDialog={handleOpenExtraDialog}
+              />
 
-                      <td>
-                        {!borrow.returnBook ? (
-                          <button onClick={() => handleReturnBook(borrow.id)}>
-                            <Button>Return</Button>
-                          </button>
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
               <p className="mt-5">
                 Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
                 Showing {res?.data.pageSize} results per page
               </p>
-              <div>
-                {res?.data.totalPages > res?.data.pageNo + 1 && (
-                  <Button onClick={nextPage} className="me-3">
-                    Next Page
-                  </Button>
-                )}
-                {res?.data.pageNo > 0 && (
-                  <Button onClick={previousPage}>Previous Page</Button>
-                )}
-              </div>
+              <PaginationButtons
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={res?.data.totalPages > res?.data.pageNo + 1}
+                hasPrevious={res?.data.pageNo > 0}
+              />
             </>
           ) : (
             <div>
@@ -510,51 +282,19 @@ const Borrowed = () => {
             </div>
           )}
 
-          {/* Dialog Extra time  */}
+          <ExtraTimeDialog
+            show={showExtraTimeDialog}
+            handleClose={handleCloseExtraDialog}
+            handleConfirm={handleConfirmExtra}
+            days={days}
+            setDays={setDays}
+          />
 
-          <Modal show={showExtraTimeDialog} onHide={handleCloseExtraDialog}>
-            <Modal.Header closeButton>
-              <Modal.Title>Extra time</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <label>Days:</label>
-              <FormControl
-                placeholder="Enter number of days..."
-                className="mb-3"
-                type="number"
-                value={days}
-                onChange={(e) => setDays(parseInt(e.target.value, 10))}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseExtraDialog}>
-                Cancel
-              </Button>
-              <Button className="save" onClick={handleConfirmExtra}>
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
+          <ErrorDialog
             show={showErrorDialog}
-            onHide={() => setShowErrorDialog(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Error</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>{errorMsg}</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="primary"
-                onClick={() => setShowErrorDialog(false)}
-              >
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            onClose={() => setShowErrorDialog(false)}
+            errorMsg={errorMsg}
+          />
         </div>
       </div>
     </>
