@@ -14,7 +14,6 @@ import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
 import { FcSearch } from "react-icons/fc";
-import "../../../style/list.css";
 import Spinner from "../../../components/animations/Spinner";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";

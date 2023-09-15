@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "./contexts/AuthContext";
 import Home from "./routes/general/Home";
 import NotFound from "./routes/general/NotFound";
@@ -26,11 +26,10 @@ import CustomersEdit from "./routes/models/customers/CustomersEdit";
 import CustomerDetails from "./routes/models/customers/CustomerDetails";
 import ChangePassword from "./routes/general/ChangePassword";
 import Borrowed from "./routes/borrow/Borrowed ";
-import Overdue from "./routes/borrow/Overdu";
+import Overdue from "./routes/borrow/Overdue";
 import AddBorrow from "./routes/borrow/AddBorrow";
 import Footer from "./components/footer/Footer";
-import { PDFViewer } from "@react-pdf/renderer";
-import BorrowPDF from "./components/file/BorrowPDF";
+import BorrowPDF from "./components/files/BorrowPDF";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);

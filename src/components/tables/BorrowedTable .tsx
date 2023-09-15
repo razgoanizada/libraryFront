@@ -89,7 +89,7 @@ const BorrowedTable = ({
             <td className="col-none">
               {!borrow.returnBook ? (
                 <button onClick={() => handleOpenExtraDialog(borrow.id)}>
-                  <Button>Extra</Button>
+                  <Button variant="warning">Extra</Button>
                 </button>
               ) : (
                 ""
@@ -98,8 +98,8 @@ const BorrowedTable = ({
             <td>
               {!borrow.returnBook ? (
                 <button onClick={() => handleReturnBook(borrow.id)}>
-                  <Button>Return</Button>
-                </button>
+                <Button variant="success">Return</Button> 
+              </button>
               ) : (
                 ""
               )}

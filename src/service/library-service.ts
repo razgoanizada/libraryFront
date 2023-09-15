@@ -401,6 +401,10 @@ export const BorrowRequest = (
     url: `/borrow/page?pageNo=${pageNo}&customerId=${customerId}&bookId=${bookId}&addedBy=${addedBy}&returnBook=${returnBook}&borrowingDateStart=${borrowingDateStart}&borrowingDateEnd=${borrowingDateEnd}&returnDateStart=${returnDateStart}&returnDateEnd=${returnDateEnd}`,
   });
 
+  export const OverdueRequest = () => request ({
+    url: `/borrow/page?returnDateEnd=${new Date().toISOString().split("T")[0]}&pageSize=1000`
+  })
+
   export const hasReturnBook = (id: number) =>
   request({
     url: `/borrow/return-book/${id}`,

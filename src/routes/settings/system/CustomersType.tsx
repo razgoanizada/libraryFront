@@ -13,7 +13,6 @@ import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
-import "../../../style/list.css"
 import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";

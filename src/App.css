@@ -1,46 +1,8 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .circle {
   width: 200px;
   height: 200px;
   border-radius: 50%;
+  background-color: #2384ce;
   transition: transform 0.3s, background-color 0.3s;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
@@ -50,12 +12,91 @@
 .circle:hover {
   transform: scale(1.1);
   background-color: rgba(255, 255, 255, 1);
+  color: black !important;
 }
 
 .pdf {
   height: 90vh;
 }
 
+a {
+  text-decoration: none !important;
+  font-weight:bold;
+}
 
+.add {
+  background-color: green;
+}
 
+.add a {
+  color: #000;
+}
 
+table {
+  border-collapse: collapse;
+}
+
+.contact a , table a {
+  color: black;
+}
+
+.contact a:hover , table a:hover {
+  color: blue;
+}
+
+th,
+td {
+  border-bottom: 1px dotted #ddd !important;
+  padding: 15px;
+}
+
+th {
+  background-color: rgb(58, 203, 203);
+}
+
+.search-icon,
+.delete,
+.edit {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.edit svg {
+  fill: rgb(15, 142, 232);
+}
+
+.delete svg {
+  fill: rgba(232, 7, 7, 0.823);
+}
+
+.btn-add {
+  border: 1px solid #000;
+  padding: 8px;
+  border-radius: 25%;
+  text-decoration: none;
+}
+
+.btn-add svg {
+  margin-right: 5px;
+}
+
+.save {
+  background-color: green;
+}
+
+.pdf-col svg {
+ fill: red;
+}
+
+.export-button svg {
+  fill: rgb(36, 128, 0);
+}
+
+@media (max-width: 991px) {
+ 
+  .col-none {
+    display: none;
+  }
+
+}

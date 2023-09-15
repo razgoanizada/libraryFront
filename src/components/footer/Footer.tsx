@@ -48,7 +48,7 @@ const Footer = () => {
               <p> Intellj Idea </p>
             </MDBCol>
 
-            <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
+            <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4 contact">
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
               <p>
                 <MDBIcon color="secondary" icon="home" className="me-2" />

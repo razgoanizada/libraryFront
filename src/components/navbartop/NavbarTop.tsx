@@ -96,7 +96,7 @@ const NavbarTop = () => {
             </Nav.Link>
           </Nav>
           <Nav className="me-auto col-lg-6 col-xl-5 col-xxl-4 d-none d-lg-flex justify-content-end align-items-center">
-            <Nav.Link href="#link" className="links col-1">
+            <Nav.Link href="/about" className="links col-1">
               <AiOutlineInfoCircle size={30} />
             </Nav.Link>
             <NavDropdown

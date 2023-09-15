@@ -5,7 +5,6 @@ import { LogsRequest } from "../../../service/library-service";
 import { Log } from "../../../@Typs";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { LuSearch } from "react-icons/lu";
-import "../../../style/list.css";
 import Spinner from "../../../components/animations/Spinner";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";

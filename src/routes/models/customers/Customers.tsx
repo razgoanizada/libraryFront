@@ -13,7 +13,6 @@ import { CgAdd } from "react-icons/cg";
 import { MdModeEditOutline } from "react-icons/md";
 import { LuSearch } from "react-icons/lu";
 import { FcSearch } from "react-icons/fc";
-import "../../../style/list.css";
 import Spinner from "../../../components/animations/Spinner";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";

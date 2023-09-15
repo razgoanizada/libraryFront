@@ -5,33 +5,22 @@ import {
   BorrowRequest,
   hasReturnBook,
   ExtraTime,
-  Borrow,
+  OverdueRequest,
 } from "../../service/library-service";
-import { CgAdd } from "react-icons/cg";
 import Spinner from "../../components/animations/Spinner";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
-import BorrowedExcel from "../../components/files/BorrowedExcel";
-import ErrorDialog from "../../components/dialogues/ErrorDialog";
+import OverduTable from "../../components/tables/OverdueTable";
 import ExtraTimeDialog from "../../components/dialogues/ExtraTimeDialog";
-import BorrowedTable from "../../components/tables/BorrowedTable ";
+import ErrorDialog from "../../components/dialogues/ErrorDialog";
 import PaginationButtons from "../../components/tables/PaginationButtons";
-import BorrowSearch from "../../components/search/BorrowSearch";
+import OverdueExcel from "../../components/files/OverdueExcel";
 
-const Borrowed = () => {
+const Overdue = () => {
   // States to manage borrow data
   const { setBorrowedPage } = useContext(LibraryContext);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
-  const [customerId, setCustomerId] = useState<string>("");
-  const [bookId, setBookId] = useState<string>("");
-  const [addedBy, setAddedBy] = useState<string>("");
-  const [returnBook, setReturnBook] = useState<boolean>(false);
-  const [borrowingDateStart, setBorrowingDateStart] = useState<string>("");
-  const [borrowingDateEnd, setBorrowingDateEnd] = useState<string>("");
-  const [returnDateStart, setReturnDateStart] = useState<string>("");
-  const [returnDateEnd, setReturnDateEnd] = useState<string>("");
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -41,7 +30,7 @@ const Borrowed = () => {
   const [days, setDays] = useState<number | "">("");
   const [selectedBorrowId, setSelectedBorrowId] = useState<number>(0);
 
-  const { data: resAllBorrow } = useQuery("get all borrow", () => Borrow());
+  const { data: resAllOverdue } = useQuery("get all overdue", () => OverdueRequest());
 
   // Fetching borrow from the server
   const { data: res } = useQuery(
@@ -49,14 +38,14 @@ const Borrowed = () => {
     () =>
       BorrowRequest(
         currentPage,
-        customerId,
-        bookId,
-        addedBy,
-        returnBook,
-        borrowingDateStart,
-        borrowingDateEnd,
-        returnDateStart,
-        returnDateEnd
+        "",
+        "",
+        "",
+        false,
+        "",
+        "",
+        "",
+        new Date().toISOString().split("T")[0]
       ),
     {
       enabled: !pageLoading,
@@ -87,38 +76,6 @@ const Borrowed = () => {
     }
   }, [currentPage, res]);
 
-  // Function to handle borrow search
-  const handleSearch = () => {
-    setCurrentPage(0);
-    setPageLoading(true);
-    BorrowRequest(
-      0,
-      customerId,
-      bookId,
-      addedBy,
-      returnBook,
-      borrowingDateStart,
-      borrowingDateEnd,
-      returnDateStart,
-      returnDateEnd
-    ).then((res) => {
-      setBorrowedPage(res.data);
-      setPageLoading(false);
-    });
-  };
-
-  const handleReset = () => {
-    setBorrowingDateStart("");
-    setBorrowingDateEnd("");
-    setReturnDateStart("");
-    setReturnDateEnd("");
-    setBookId("");
-    setCustomerId("");
-    setAddedBy("");
-    setReturnBook(false);
-    handleSearch();
-  };
-
   const handleReturnBook = (borrowId: any) => {
     setPageLoading(true);
     Swal.fire({
@@ -135,21 +92,21 @@ const Borrowed = () => {
             setBorrowedPage(res.data);
             setPageLoading(false);
             Swal.fire({
-              title: "The book was returned to the library",
+              title: "Successfully",
               icon: "success",
               timer: 2000,
             });
           })
           .catch((error) => {
-            setErrorMsg(error.message);
             setShowErrorDialog(true);
+            setErrorMsg(error.message);
             setPageLoading(false);
           });
       }
     });
   };
 
-  // Functions to manage Edit Extra days dialog
+  // Functions to manage Edit Extra time dialog
   const handleOpenExtraDialog = (borrowId: number) => {
     setSelectedBorrowId(borrowId);
     setShowExtraTimeDialog(true);
@@ -179,7 +136,7 @@ const Borrowed = () => {
         setPageLoading(false);
         setSelectedBorrowId(0);
         Swal.fire({
-          title: `${Number(days)} days have been successfully added`,
+          title: "Successfully",
           icon: "success",
           timer: 2000,
         });
@@ -193,70 +150,28 @@ const Borrowed = () => {
     handleCloseExtraDialog();
   };
 
-  // Function to handle the returned in the select dropdown
-  const handleIsReturned = (e: any) => {
-    const selectedValue = e.target.value;
-    setReturnBook(selectedValue);
-  };
-
   // Determine if the data is still loading
   const isLoading = pageLoading || !res;
 
   return (
     <>
       <Helmet>
-        <title>Borrowed</title>
+        <title>Overdue </title>
       </Helmet>
+
       <div className="container mt-3">
         <div className="flex flex-column">
-          <div className="flex">
-            <div className="flex flex-col">
-              <div className="flex items-center">
-                <Link
-                  to="/borrow-add"
-                  className="add btn-primary py-2 px-2 rounded-lg"
-                >
-                  <div className="flex items-center text-black">
-                    <CgAdd className="w-6 h-6" />
-                    <span className="ml-2">Add</span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <BorrowSearch
-              borrowingDateStart={borrowingDateStart}
-              setBorrowingDateStart={setBorrowingDateStart}
-              borrowingDateEnd={borrowingDateEnd}
-              setBorrowingDateEnd={setBorrowingDateEnd}
-              returnDateStart={returnDateStart}
-              setReturnDateStart={setReturnDateStart}
-              returnDateEnd={returnDateEnd}
-              setReturnDateEnd={setReturnDateEnd}
-              bookId={bookId}
-              setBookId={setBookId}
-              customerId={customerId}
-              setCustomerId={setCustomerId}
-              addedBy={addedBy}
-              setAddedBy={setAddedBy}
-              returnBook={returnBook}
-              handleIsReturned={handleIsReturned}
-              handleSearch={handleSearch}
-              handleReset={handleReset}
-            />
-          </div>
-
           {res?.data.totalBorrowed > 0 ? (
             <>
               <div className="export-button">
-                <BorrowedExcel data={resAllBorrow?.data} />
+                <OverdueExcel data={resAllOverdue?.data.results} />
               </div>
 
-              <BorrowedTable
+              <OverduTable
                 borrowedData={res?.data.results}
                 handleReturnBook={handleReturnBook}
                 handleOpenExtraDialog={handleOpenExtraDialog}
               />
-
               <p className="mt-5">
                 Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
                 Showing {res?.data.pageSize} results per page
@@ -273,7 +188,7 @@ const Borrowed = () => {
               {isLoading ? (
                 <Spinner name="Puff" />
               ) : (
-               <h5> No results have been found</h5>
+                <h5> No results have been found</h5>
               )}
             </div>
           )}
@@ -297,4 +212,4 @@ const Borrowed = () => {
   );
 };
 
-export default Borrowed;
+export default Overdue;

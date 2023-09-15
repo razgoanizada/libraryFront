@@ -7,7 +7,7 @@ import { Books, BorrowAdd, Customers } from "../../service/library-service";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { Book, Borrow, Customer } from "../../@Typs";
+import { Book, Customer } from "../../@Typs";
 
 const AddBorrow = () => {
   const nav = useNavigate();
@@ -36,11 +36,11 @@ const AddBorrow = () => {
         validationSchema={validationSchema}
         initialValues={intiailValues}
         onSubmit={({ customer, book }) => {
-          setLoading(true); //show progress spinner
+          setLoading(true);
           BorrowAdd(customer, book)
             .then(() => {
               Swal.fire({
-                title: "successfully",
+                title: "The book has been borrowed successfully",
                 icon: "success",
                 timer: 2000,
               });
@@ -51,7 +51,7 @@ const AddBorrow = () => {
               Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: error.message,
+                html: `${error.message} </br> <a href="/borrowed"> Return books</a>`,
               });
             })
             .finally(() => {
@@ -60,12 +60,12 @@ const AddBorrow = () => {
         }}
       >
         <Form>
-          {loading && <Spinner name="Puff" />}
-          <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
+          {loading && <Spinner name="CirclesWithBar" />}
+          <div className="bg-white shadow-md rounded-lg my-20 w-1/2 mx-auto p-4 flex flex-col gap-2">
             <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="customer">Customer:</label>
               <Field
-                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                className="px-2 py-1 rounded-md border-blue-300 border-2"
                 placeholder="Customer..."
                 name="customer"
                 as="select"
@@ -78,23 +78,28 @@ const AddBorrow = () => {
                   (customer: Customer) =>
                     customer.active && customer.customerTypeName != null
                 ) ? (
-                  resCustomers?.data.map(
-                    (customer: Customer) =>
-                      customer.active &&
-                      customer.customerTypeName != null && (
-                        <option key={customer.id} value={customer.id}>
-                          {customer.firstName} {customer.lastName} (
-                          {customer.tz})
-                        </option>
+                  resCustomers?.data
+                    .filter(
+                      (customer: Customer) =>
+                        customer.active && customer.customerTypeName != null
+                    )
+                    .sort((a: Customer, b: Customer) =>
+                      `${a.firstName} ${a.lastName}`.localeCompare(
+                        `${b.firstName} ${b.lastName}`
                       )
-                  )
+                    )
+                    .map((customer: Customer) => (
+                      <option key={customer.id} value={customer.id}>
+                        {customer.firstName} {customer.lastName} ({customer.tz})
+                      </option>
+                    ))
                 ) : (
                   <option value="" className="bg-stone-500">
                     No eligible customers available
                   </option>
                 )}
               </Field>
-              {/* error message for the input */}
+
               <ErrorMessage
                 name="customer"
                 component="div"
@@ -105,7 +110,7 @@ const AddBorrow = () => {
             <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="book">Book:</label>
               <Field
-                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                className="px-2 py-1 rounded-md border-blue-300 border-2"
                 placeholder="Custommer..."
                 name="book"
                 as="select"
@@ -115,30 +120,35 @@ const AddBorrow = () => {
                   Select
                 </option>
                 {resBook?.data.length > 0 ? (
-                  resBook?.data.some(
-                    (book: Book) =>
-                      book.borrows[book.borrows.length - 1].returnBook
-                  ) ? (
-                    resBook?.data.map(
+                  resBook?.data
+                    .filter(
                       (book: Book) =>
-                        book.borrows[book.borrows.length - 1].returnBook && (
-                          <option key={book.id} value={book.id}>
-                            {book.name} ({book.author})
-                          </option>
-                        )
+                        book.borrows.length === 0 ||
+                        book.borrows[book.borrows.length - 1].returnBook
                     )
-                  ) : (
-                    <option value="" className="bg-stone-500">
-                      All books are currently being borrowed
-                    </option>
-                  )
+                    .sort((a: Book, b: Book) => a.name.localeCompare(b.name))
+                    .map((book: Book) => (
+                      <option key={book.id} value={book.id}>
+                        {book.name} ({book.author})
+                      </option>
+                    ))
                 ) : (
                   <option value="" className="bg-stone-500">
                     There are no books in the library
                   </option>
                 )}
+                {resBook?.data.length > 0 &&
+                  !resBook?.data.some(
+                    (book: Book) =>
+                      book.borrows.length === 0 ||
+                      book.borrows[book.borrows.length - 1].returnBook
+                  ) && (
+                    <option value="" className="bg-stone-500">
+                       All books are currently being borrowed
+                    </option>
+                  )}
               </Field>
-              {/* error message for the input */}
+
               <ErrorMessage
                 name="book"
                 component="div"

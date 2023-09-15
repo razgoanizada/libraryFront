@@ -131,7 +131,7 @@ const BorrowSearch = ({
               <option value={librarian.id}>{librarian.userName}</option>
             ))}
           </FormControl>
-          <div className="flex align-items-center mx-4">Returned:</div>
+          <div className="flex align-items-center mx-2">Returned:</div>
           <FormControl
             as="select"
             placeholder="Returned ?"

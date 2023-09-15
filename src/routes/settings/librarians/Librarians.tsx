@@ -13,7 +13,6 @@ import { MdModeEditOutline } from "react-icons/md";
 import { AiFillDelete, AiFillLock } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
 import { FcSearch } from "react-icons/fc";
-import "../../../style/list.css";
 import Spinner from "../../../components/animations/Spinner";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
