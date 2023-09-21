@@ -2,25 +2,36 @@ import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import {
   BookIDRequest,
-  BorrowsLibrarian,
-  CustomersLibrarian,
+  BorrowRequest,
+  Customers,
 } from "../../../service/library-service";
 import { Book, Borrow, Customer } from "../../../@Typs";
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+import { BsFilePdf } from "react-icons/bs";
+import Spinner from "../../../components/animations/Spinner";
 
 const BooksDetails = () => {
   const { id } = useParams();
-  const { data: res } = useQuery("get book", () => BookIDRequest(id));
-  const { data: resBorrows } = useQuery("get borrows", () =>
-    BorrowsLibrarian(id)
+  const { data: res, isLoading } = useQuery("get book", () => BookIDRequest(id));
+  const { data: resCustomers } = useQuery("get customers", () => Customers());
+  
+  const { data: resAllBorrowsReturned } = useQuery("get borrowed", () =>
+    BorrowRequest(0, "", id || "0", "", true, "", "", "", "")
   );
-  const { data: resCustomers } = useQuery("get customers", () =>
-    CustomersLibrarian(id)
+
+  const { data: resAllBorrowsNotReturned } = useQuery(
+    "get borrowed not returned",
+    () => BorrowRequest(0, "", id || "0", "", false, "", "", "", "")
   );
 
   const book: Book | undefined = res?.data;
 
-  if (book?.name) {
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (book) {
     return (
       <>
       <Helmet>
@@ -61,79 +72,132 @@ const BooksDetails = () => {
             </tr>
           </table>
           <h2 className="p-3 mt-3 font-thin">
-            <span className="relative">
-              The last 5 customers that he added
-              <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
-            </span>
-          </h2>
-          {resBorrows?.data.totalBorrowed > 0 ? (
-            <table className="mt-4 w-11/12">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Phone</th>
-                  <th>Creation date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resBorrows?.data.results.map((borrow: Borrow) => (
-                  <tr key={borrow.id}>
-                    <td>{borrow.id} </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+              <span className="relative">
+              Currently at the customer's
+                <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
+              </span>
+            </h2>
+            {resAllBorrowsNotReturned?.data.totalBorrowed > 0 ? (
+              <table className="mt-4 w-8/12">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Borrowed on</th>
+                    <th className="col-none">Librarian</th>
+                    <th>Returned on</th>
+                    <th>PDF</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <h5 className="mt-4 text-center w-11/12">
-              There are no borrows to display
-            </h5>
-          )}
+                </thead>
+                <tbody>
+                  {resAllBorrowsNotReturned?.data.results.map(
+                    (borrow: Borrow) => (
+                      <tr key={borrow.id}>
+                        <td>
+              {resCustomers?.data.find(
+                (customer: Customer) => customer.id === borrow.customerId
+              ) ? (
+                <Link to={`/customers/${borrow.customerId}`}>
+                  {
+                    resCustomers.data.find(
+                      (customer: Customer) => customer.id === borrow.customerId
+                    ).firstName
+                  }{" "}
+                  {
+                    resCustomers.data.find(
+                      (customer: Customer) => customer.id === borrow.customerId
+                    ).lastName
+                  }
+                </Link>
+              ) : (
+                ""
+              )}
+            </td>
+                        <td>{borrow.borrowingDate.toString()}</td>
+                        <td className="col-none">{borrow.addedByUserName}</td>
+                        <td>
+                          {" "}
+                          {borrow.returnedOn
+                            ? borrow.returnedOn.toString()
+                            : "not returned"}{" "}
+                        </td>
+                        <td className="pdf-col">
+                          <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
+                            <BsFilePdf size={30} />
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            ) : (
+              <h5 className="mt-4 text-center w-11/12">
+                There are no borrows to display
+              </h5>
+            )}
 
-          <h2 className="p-3 mt-3 font-thin">
-            <span className="relative">
-              The last 5 customers that he added
-              <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
-            </span>
-          </h2>
-          {resCustomers?.data.totalCustomers > 0 ? (
-            <table className="mt-4 w-11/12">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Phone</th>
-                  <th>Creation date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resCustomers?.data.results.map((customer: Customer) => (
-                  <tr key={customer.id}>
-                    <td>
-                      {customer.firstName} {customer.lastName}
-                    </td>
-                    <td>{customer.customerTypeName}</td>
-                    <td>{customer.phone}</td>
-                    <td>{customer.creationDate.toString()}</td>
+            <h2 className="p-3 mt-3 font-thin">
+              <span className="relative">
+              The last 10 customers 
+                <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
+              </span>
+            </h2>
+            {resAllBorrowsReturned?.data.totalBorrowed > 0 ? (
+              <table className="mt-4 w-8/12">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Borrowed on</th>
+                    <th className="col-none">Librarian</th>
+                    <th>Returned on</th>
+                    <th>PDF</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <h5 className="mt-4 text-center w-11/12">
-              There are no customers to display
-            </h5>
-          )}
-
-          <h2 className="p-3 mt-3 font-thin">
-            <span className="relative">
-              The last 5 customers that he added
-              <span className="bg-sky-300 absolute inset-x-0 bottom-0 h-1"></span>
-            </span>
-          </h2>
+                </thead>
+                <tbody>
+                  {resAllBorrowsReturned?.data.results.map((borrow: Borrow) => (
+                    <tr key={borrow.id}>
+                      <td>
+              {resCustomers?.data.find(
+                (customer: Customer) => customer.id === borrow.customerId
+              ) ? (
+                <Link to={`/customers/${borrow.customerId}`}>
+                  {
+                    resCustomers.data.find(
+                      (customer: Customer) => customer.id === borrow.customerId
+                    ).firstName
+                  }{" "}
+                  {
+                    resCustomers.data.find(
+                      (customer: Customer) => customer.id === borrow.customerId
+                    ).lastName
+                  }
+                </Link>
+              ) : (
+                ""
+              )}
+            </td>
+                      <td>{borrow.borrowingDate.toString()}</td>
+                      <td className="col-none">{borrow.addedByUserName}</td>
+                      <td>
+                        {" "}
+                        {borrow.returnedOn
+                          ? borrow.returnedOn.toString()
+                          : "not returned"}{" "}
+                      </td>
+                      <td className="pdf-col">
+                        <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
+                          <BsFilePdf size={30} />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <h5 className="mt-4 text-center w-11/12">
+                There are no borrows to display
+              </h5>
+            )}
         </div>
       </div>
       </>

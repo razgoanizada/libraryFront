@@ -1,15 +1,14 @@
 import { CirclesWithBar, Puff, RevolvingDot } from "react-loader-spinner";
 
 interface SpinnerProps {
-  name: string;
-  title?: string;
+  name?: string;
 }
 
-const Spinner = ({ name, title }: SpinnerProps) => {
+const Spinner = ({ name }: SpinnerProps) => {
   if (name === "CirclesWithBar") {
     return (
      <div className="flex justify-center items-center">
-        <p>{title ?? ""}</p>
+       
         <CirclesWithBar
           wrapperClass=""
           height={100}
@@ -21,7 +20,6 @@ const Spinner = ({ name, title }: SpinnerProps) => {
   } else if (name === "Puff") {
     return (
       <div>
-        <p>{title ?? ""}</p>
         <Puff
           height="100"
           width="100"
@@ -37,7 +35,6 @@ const Spinner = ({ name, title }: SpinnerProps) => {
   } else {
     return (
       <div className="flex justify-center items-center">
-        <p>{title ?? ""}</p>
         <RevolvingDot
           height="100"
           width="100"

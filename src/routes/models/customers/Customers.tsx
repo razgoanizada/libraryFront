@@ -2,21 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
 import {
-  Librarians,
+  Customers as allCustomers,
   CustomersRequest,
-  CustomersType,
   CustomerActive,
 } from "../../../service/library-service";
-import { CustomerType, Customer, Librarian } from "../../../@Typs";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
-import { MdModeEditOutline } from "react-icons/md";
-import { LuSearch } from "react-icons/lu";
-import { FcSearch } from "react-icons/fc";
 import Spinner from "../../../components/animations/Spinner";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
+import CustomersSearch from "../../../components/search/CustomersSearch";
+import CustomersExcel from "../../../components/files/CustomersExcel";
+import CustomersTable from "../../../components/tables/CustomersTable";
+import PaginationButtons from "../../../components/tables/PaginationButtons";
+import ErrorDialog from "../../../components/dialogues/ErrorDialog";
 
 const Customers = () => {
   // States to manage customer data
@@ -33,10 +32,8 @@ const Customers = () => {
   const [showErrorDialog, setShowErrorDialog] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
-
-  const { data: resLibrarians } = useQuery("get librarians", () =>
-    Librarians()
+  const { data: resAllCustomers } = useQuery("get all customers", () =>
+    allCustomers()
   );
 
   // Fetching customers from the server
@@ -101,7 +98,23 @@ const Customers = () => {
     });
   };
 
-  const handleActive = (customerId: any) => {
+  const handleReset = () => {
+    setAddedBy("");
+    setFirstName("");
+    setLastName("");
+    setPhone("");
+    setTz("");
+    setType("");
+    setIsActive(true);
+    handleSearch();
+  };
+
+  const handleActive = (
+    customerId: any,
+    customerFisrtName: String,
+    cutomerLastName: String,
+    CustomerIsActive: boolean
+  ) => {
     setPageLoading(true);
     Swal.fire({
       title: "Are you sure?",
@@ -117,7 +130,9 @@ const Customers = () => {
             setCustomersPage(res.data);
             setPageLoading(false);
             Swal.fire({
-              title: "Successfully",
+              title: `The customer ${customerFisrtName} ${cutomerLastName} is now ${
+                CustomerIsActive ? "active" : "inactive"
+              } `,
               icon: "success",
               timer: 2000,
             });
@@ -162,210 +177,64 @@ const Customers = () => {
                 </Link>
               </div>
             </div>
-            <InputGroup className="search row ms-5">
-              <div className="search-bar">
-                <div className="flex col-10">
-                  <FormControl
-                    placeholder="Search First Name..."
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  <Button
-                    variant="btn-search"
-                    onClick={handleSearch}
-                    className="search-icon d-flex d-lg-none"
-                  >
-                    <FcSearch size={30} />
-                  </Button>
-                  <FormControl
-                    placeholder="Search Last Name..."
-                    className="mx-3 d-none d-lg-flex"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                  <FormControl
-                    placeholder="Search Phone..."
-                    className="mx-3 d-none d-lg-flex"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                  <FormControl
-                    placeholder="Search ID..."
-                    className="mx-3 d-none d-lg-flex"
-                    value={tz}
-                    onChange={(e) => setTz(e.target.value)}
-                  />
-                </div>
-                <div className="flex col-11 mt-3">
-                  <FormControl
-                    as="select"
-                    placeholder="select"
-                    className="d-none d-lg-flex mx-3"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                  >
-                    <option value={""} className="bg-stone-500">
-                      Select Type
-                    </option>
-                    {resCustomerType?.data.map((type: CustomerType) => (
-                      <option value={type.id}>{type.name}</option>
-                    ))}
-                  </FormControl>
-
-                  <FormControl
-                    as="select"
-                    placeholder="select"
-                    className="d-none d-lg-flex"
-                    value={addedBy}
-                    onChange={(e) => setAddedBy(e.target.value)}
-                  >
-                    <option value={""} className="bg-stone-500">
-                      Select Added by
-                    </option>
-
-                    {resLibrarians?.data.map((librarian: Librarian) => (
-                      <option value={librarian.id}>{librarian.userName}</option>
-                    ))}
-                  </FormControl>
-                  <div className="d-none d-lg-flex align-items-center mx-4">
-                    Active:
-                  </div>
-                  <FormControl
-                    as="select"
-                    placeholder="Active?"
-                    className="d-none d-lg-flex"
-                    value={isActive.toString()}
-                    onChange={handleIsActiveChange}
-                  >
-                    <option value={"true"}>true</option>
-                    <option value={"false"}>false</option>
-                  </FormControl>
-                  <Button
-                    variant="btn-search"
-                    onClick={handleSearch}
-                    className="search-icon d-none d-lg-flex"
-                  >
-                    <LuSearch size={30} />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="d-none d-lg-flex"
-                    onClick={() => {
-                      setAddedBy("");
-                      setFirstName("");
-                      setLastName("");
-                      setPhone("");
-                      setTz("");
-                      setType("");
-                      setIsActive(true);
-                      handleSearch();
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </InputGroup>
+            <CustomersSearch
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              phone={phone}
+              setPhone={setPhone}
+              tz={tz}
+              setTz={setTz}
+              type={type}
+              setType={setType}
+              addedBy={addedBy}
+              setAddedBy={setAddedBy}
+              isActive={isActive}
+              handleIsActiveChange={handleIsActiveChange}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+            />
           </div>
 
           {res?.data.totalCustomers > 0 ? (
             <>
-              <table className="mt-4">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th className="col-none">Phone</th>
-                    <th className="col-none">ID</th>
-                    <th className="col-none">Type</th>
-                    <th className="col-none">Added by</th>
-                    <th>Edit</th>
-                    <th>Activate / Deactivate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {res?.data.results.map((customer: Customer) => (
-                    <tr key={customer.id}>
-                      <td>
-                        <Link
-                          to={`/customers/${customer.id}`}
-                          key={customer.id}
-                        >
-                          {customer.firstName} {customer.lastName}
-                        </Link>
-                      </td>
-                      <td className="col-none">{customer.phone} </td>
-                      <td className="col-none">{customer.tz} </td>
-                      <td className="col-none">{customer.customerTypeName} </td>
-                      <td className="col-none">{customer.addedByUserName} </td>
+              <div className="export-button">
+                <CustomersExcel data={resAllCustomers?.data} />
+              </div>
 
-                      <td>
-                        <button className="edit">
-                          <Link
-                            to={`/customers-edit/${customer.id}`}
-                            key={customer.id}
-                          >
-                            <MdModeEditOutline size={30} />
-                          </Link>
-                        </button>
-                      </td>
+              <CustomersTable
+                customersData={res?.data.results}
+                handleActive={handleActive}
+              />
 
-                      <td>
-                        <button onClick={() => handleActive(customer.id)}>
-                          {customer.active ? (
-                            <Button>Deactivate</Button>
-                          ) : (
-                            <Button>Activate </Button>
-                          )}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
               <p className="mt-5">
                 Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
                 Showing {res?.data.pageSize} results per page
               </p>
-              <div>
-                {res?.data.totalPages > res?.data.pageNo + 1 && (
-                  <Button onClick={nextPage} className="me-3">
-                    Next Page
-                  </Button>
-                )}
-                {res?.data.pageNo > 0 && (
-                  <Button onClick={previousPage}>Previous Page</Button>
-                )}
-              </div>
+
+              <PaginationButtons
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={res?.data.totalPages > res?.data.pageNo + 1}
+                hasPrevious={res?.data.pageNo > 0}
+              />
             </>
           ) : (
-            <div>
+            <div className="flex justify-center items-center mt-16 ">
               {isLoading ? (
                 <Spinner name="Puff" />
               ) : (
-                "No results have been found"
+                <h5> No results have been found</h5>
               )}
             </div>
           )}
 
-          <Modal
+          <ErrorDialog
             show={showErrorDialog}
-            onHide={() => setShowErrorDialog(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Error</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>{errorMsg}</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="primary"
-                onClick={() => setShowErrorDialog(false)}
-              >
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            onClose={() => setShowErrorDialog(false)}
+            errorMsg={errorMsg}
+          />
         </div>
       </div>
     </>

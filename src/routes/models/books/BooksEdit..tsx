@@ -15,7 +15,7 @@ import { Helmet } from "react-helmet";
 
 const BooksEdit = () => {
   const { id } = useParams();
-  const { data: res } = useQuery("get book", () => BookIDRequest(id));
+  const { data: res, isLoading } = useQuery("get book", () => BookIDRequest(id));
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const book: Book | undefined = res?.data;
@@ -24,7 +24,11 @@ const BooksEdit = () => {
     BooksCategories()
   );
 
-  if (book?.name) {
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (book) {
     const validationSchema = Yup.object({
       description: Yup.string().min(15).max(250).required(),
       bookcase: Yup.number().min(10).max(99999).required(),
@@ -51,7 +55,7 @@ const BooksEdit = () => {
             BookUpdate(description, bookcase, category, book?.id)
               .then(() => {
                 Swal.fire({
-                  title: "Book successfully save",
+                  title: "The book was successfully edited",
                   icon: "success",
                   timer: 2000,
                 });
@@ -72,7 +76,7 @@ const BooksEdit = () => {
         >
           <Form>
             {loading && <Spinner name="CirclesWithBar" />}
-            <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
+            <div className="bg-white shadow-md rounded-lg my-5 w-1/2 mx-auto p-4 flex flex-col gap-2">
               <div className="font-extralight text-lg my-2 form-group gap-2 flex flex-col">
                 <label htmlFor="description">Description:</label>
                 <Field
@@ -119,9 +123,13 @@ const BooksEdit = () => {
                   <option value={""} className="bg-stone-500">
                     Select
                   </option>
-                  {resBookCategories?.data.map((category: BookCategories) => (
-                    <option value={category.name}>{category.name}</option>
-                  ))}
+                  {resBookCategories?.data
+                    .sort((a: BookCategories, b: BookCategories) =>
+                      a.name.localeCompare(b.name)
+                    )
+                    .map((category: BookCategories) => (
+                      <option value={category.name}>{category.name}</option>
+                    ))}
                 </Field>
                 {/* error message for the input */}
                 <ErrorMessage

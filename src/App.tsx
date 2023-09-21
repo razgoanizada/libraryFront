@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "./contexts/AuthContext";
 import Home from "./routes/general/Home";
 import NotFound from "./routes/general/NotFound";
@@ -33,98 +33,93 @@ import BorrowPDF from "./components/files/BorrowPDF";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
+
+  if (!isLoading && !isLoggedIn) {
+    return <Login />;
+  }
 
   return (
     <>
       {isLoggedIn && <NavbarTop />}
-      <Routes>
-        <>
-          {isLoggedIn && (
-            <>
-              <>
-                <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/books" element={<Books />} />
-                <Route path="/books/:id" element={<BooksDetails />} />
-                <Route path="/customers" element={<Customers />} />
-                <Route path="/customers-add" element={<AddCustomer />} />
-                <Route path="/customers-edit/:id" element={<CustomersEdit />} />
-                <Route path="/customers/:id" element={<CustomerDetails />} />
-                <Route path="/change-password" element={<ChangePassword />} />
-                <Route path="/borrowed" element={<Borrowed />} />
-                <Route path="/overdue" element={<Overdue />} />
-                <Route path="/borrow-add" element={<AddBorrow />} />
-                <Route
-                  path="/borrow-pdf/:id"
-                  element={
-                   
-                      <BorrowPDF />
-                    
-                  }
-                />
-              </>
-              <>
-                {HasPermission("admin") && (
-                  <>
-                    <Route path="/librarians" element={<Librarians />} />
-                    <Route
-                      path="/librarians/:id"
-                      element={<LibrariansDetails />}
-                    />
-                    <Route path="/librarians-add" element={<AddLibrarian />} />
-                    <Route
-                      path="/librarians-edit/:id"
-                      element={<LibrariansEdit />}
-                    />
-                    <Route path="/books-category" element={<BookCategory />} />
-                    <Route path="/customers-type" element={<CustomersType />} />
-                    <Route path="/logs" element={<Logs />} />
-                  </>
-                )};
-                {!HasPermission("admin") && (
-                  <>
-                    <Route path="/librarians" element={<Unauthorized />} />
-                    <Route path="/librarians/:id" element={<Unauthorized />} />
-                    <Route path="/librarians-add" element={<Unauthorized />} />
-                    <Route
-                      path="/librarians-edit/:id"
-                      element={<Unauthorized />}
-                    />
-                    <Route path="/books-category" element={<Unauthorized />} />
-                    <Route path="/customers-type" element={<Unauthorized />} />
-                    <Route path="/logs" element={<Unauthorized />} />
-                  </>
-                )}
-                ;
-                {HasPermission("pro") && (
-                  <>
-                    <Route path="/books-add" element={<AddBook />} />
-                    <Route path="/books-edit/:id" element={<BooksEdit />} />
-                  </>
-                )}
-                ;
-                {!HasPermission("pro") && (
-                  <>
-                    <Route path="/books-add" element={<Unauthorized />} />
-                    <Route path="/books-edit/:id" element={<Unauthorized />} />
-                  </>
-                )}
-                ;
-              </>
-              <Route path="*" element={<NotFound />} />
-            </>
-          )}
-          ;
-          {!isLoggedIn && (
-            <>
-              <Route path="*" element={<Login />} />
-            </>
-          )}
-          ;
-        </>
-      </Routes>
-
+      {isLoggedIn && (
+        <Routes>
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/books" element={<Books />} />
+            <Route path="/books/:id" element={<BooksDetails />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/customers-add" element={<AddCustomer />} />
+            <Route path="/customers-edit/:id" element={<CustomersEdit />} />
+            <Route path="/customers/:id" element={<CustomerDetails />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/borrowed" element={<Borrowed />} />
+            <Route path="/overdue" element={<Overdue />} />
+            <Route path="/borrow-add" element={<AddBorrow />} />
+            <Route path="/borrow-pdf/:id" element={<BorrowPDF />} />
+            <Route
+              path="/books-add"
+              element={HasPermission("pro") ? <AddBook /> : <Unauthorized />}
+            />
+            <Route
+              path="/books-edit/:id"
+              element={HasPermission("pro") ? <BooksEdit /> : <Unauthorized />}
+            />
+            <Route
+              path="/librarians"
+              element={
+                HasPermission("admin") ? <Librarians /> : <Unauthorized />
+              }
+            />
+            <Route
+              path="/librarians/:id"
+              element={
+                HasPermission("admin") ? (
+                  <LibrariansDetails />
+                ) : (
+                  <Unauthorized />
+                )
+              }
+            />
+            <Route
+              path="/librarians-add"
+              element={
+                HasPermission("admin") ? <AddLibrarian /> : <Unauthorized />
+              }
+            />
+            <Route
+              path="/librarians-edit/:id"
+              element={
+                HasPermission("admin") ? <LibrariansEdit /> : <Unauthorized />
+              }
+            />
+            <Route
+              path="/books-category"
+              element={
+                HasPermission("admin") ? <BookCategory /> : <Unauthorized />
+              }
+            />
+            <Route
+              path="/customers-type"
+              element={
+                HasPermission("admin") ? <CustomersType /> : <Unauthorized />
+              }
+            />
+            <Route
+              path="/logs"
+              element={HasPermission("admin") ? <Logs /> : <Unauthorized />}
+            />
+            <Route path="*" element={<NotFound />} />
+          </>
+        </Routes>
+      )}
       {isLoggedIn && <Footer />}
     </>
   );

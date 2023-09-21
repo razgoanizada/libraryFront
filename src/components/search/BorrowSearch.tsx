@@ -1,4 +1,3 @@
-
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { LuSearch } from "react-icons/lu";
@@ -94,9 +93,11 @@ const BorrowSearch = ({
             <option value={""} className="bg-stone-500">
               Select Book
             </option>
-            {resBooks?.data.map((book: Book) => (
-              <option value={book.id}>{book.name}</option>
-            ))}
+            {resBooks?.data
+              .sort((a: Book, b: Book) => a.name.localeCompare(b.name))
+              .map((book: Book) => (
+                <option value={book.id}>{book.name}</option>
+              ))}
           </FormControl>
 
           <FormControl
@@ -109,11 +110,17 @@ const BorrowSearch = ({
             <option value={""} className="bg-stone-500">
               Select Customer
             </option>
-            {resCustomers?.data.map((customer: Customer) => (
-              <option value={customer.id}>
-                {customer.firstName} {customer.lastName} ({customer.tz})
-              </option>
-            ))}
+            {resCustomers?.data
+              .sort((a: Customer, b: Customer) =>
+                `${a.firstName} ${a.lastName}`.localeCompare(
+                  `${b.firstName} ${b.lastName}`
+                )
+              )
+              .map((customer: Customer) => (
+                <option value={customer.id}>
+                  {customer.firstName} {customer.lastName} ({customer.tz})
+                </option>
+              ))}
           </FormControl>
 
           <FormControl
@@ -127,9 +134,13 @@ const BorrowSearch = ({
               Select Added by
             </option>
 
-            {resLibrarians?.data.map((librarian: Librarian) => (
-              <option value={librarian.id}>{librarian.userName}</option>
-            ))}
+            {resLibrarians?.data
+              .sort((a: Librarian, b: Librarian) =>
+                a.userName.localeCompare(b.userName)
+              )
+              .map((librarian: Librarian) => (
+                <option value={librarian.id}>{librarian.userName}</option>
+              ))}
           </FormControl>
           <div className="flex align-items-center mx-2">Returned:</div>
           <FormControl

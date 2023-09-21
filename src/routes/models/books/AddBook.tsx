@@ -22,7 +22,7 @@ const AddBook = () => {
     author: Yup.string().min(2).max(10).required(),
     publishYear: Yup.number()
       .min(1000, "Publish year must be greater than or equal to 1000")
-      .max(9999, "Publish year must be less than or equal to 9999")
+      .max(2023, "Publish year must be less than or equal to 2023")
       .required("Publish year is a required field"),
     description: Yup.string().min(15).max(250).required(),
     bookcase: Yup.number().min(10).max(99999).required(),
@@ -86,7 +86,7 @@ const AddBook = () => {
         }}
       >
         <Form>
-          {loading && <Spinner name="Puff" />}
+          {loading && <Spinner name="CirclesWithBar" />}
           <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
             <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="name">Name:</label>
@@ -185,9 +185,13 @@ const AddBook = () => {
                 <option value={""} className="bg-stone-500">
                   Select
                 </option>
-                {resBookCategories?.data.map((category: BookCategories) => (
-                  <option value={category.name}>{category.name}</option>
-                ))}
+                {resBookCategories?.data
+                  .sort((a: BookCategories, b: BookCategories) =>
+                    a.name.localeCompare(b.name)
+                  )
+                  .map((category: BookCategories) => (
+                    <option value={category.name}>{category.name}</option>
+                  ))}
               </Field>
               {/* error message for the input */}
               <ErrorMessage

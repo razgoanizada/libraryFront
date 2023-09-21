@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { BsFilePdf } from "react-icons/bs";
 import { Book, Borrow, Customer } from "../../@Typs";
 import { Button } from "react-bootstrap";
 import { useQuery } from "react-query";
-import { Books, Customers, Librarians } from "../../service/library-service";
+import { Books, Customers } from "../../service/library-service";
 
 const OverduTable = ({
   borrowedData,
@@ -12,8 +11,6 @@ const OverduTable = ({
 }: any) => {
   const { data: resCustomers } = useQuery("get customers", () => Customers());
   const { data: resBooks } = useQuery("get books", () => Books());
-
-  useQuery("get librarians", () => Librarians());
 
   return (
     <table className="mt-4">

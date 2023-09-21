@@ -10,7 +10,7 @@ import authService from "../../service/auth-service";
 import AuthContext from "../../contexts/AuthContext";
 
 const Login = () => {
-  const {login } = useContext(AuthContext);
+  const {login, isLoggedIn } = useContext(AuthContext);
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -96,7 +96,7 @@ const Login = () => {
           </Form>
         </div>
         <div className="login-img d-none d-lg-flex lg:flex-1">
-          <img src={library} alt="" />
+          <img src={library} alt="library" />
         </div>
       </div>
     )}

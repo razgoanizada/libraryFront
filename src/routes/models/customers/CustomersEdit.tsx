@@ -16,16 +16,20 @@ import { City } from "../../../service/address";
 
 const CustomersEdit = () => {
   const { id } = useParams();
-  const { data: res } = useQuery("get customers", () => CustomerIDRequest(id));
+  const { data: res, isLoading } = useQuery("get customers", () => CustomerIDRequest(id));
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const customer: Customer | undefined = res?.data;
 
   const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
 
-  const {data: resCity } = useQuery("get city", () => City());
+  const { data: resCity } = useQuery("get city", () => City());
 
-  if (customer?.firstName) {
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (customer) {
     const validationSchema = Yup.object({
       firstName: Yup.string()
         .min(2, "First name must be at least 2 characters")
@@ -38,7 +42,7 @@ const CustomersEdit = () => {
       phone: Yup.string().min(9).max(11).required(),
       gender: Yup.string().required(),
       address: Yup.string(),
-      dateOfBirth: Yup.date().max(
+      dateOfBirth: Yup.date().notRequired().max(
         new Date(),
         "Date of birth should be in the past"
       ),
@@ -89,7 +93,7 @@ const CustomersEdit = () => {
             )
               .then(() => {
                 Swal.fire({
-                  title: "Customer successfully save",
+                  title: "Customer successfully edit",
                   icon: "success",
                   timer: 2000,
                 });
@@ -109,7 +113,7 @@ const CustomersEdit = () => {
           }}
         >
           <Form>
-            {loading && <Spinner name="Puff" />}
+            {loading && <Spinner name="CirclesWithBar" />}
             <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
               <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
                 <label htmlFor="firstName">First name:</label>
@@ -174,9 +178,13 @@ const CustomersEdit = () => {
                   <option value={""} className="bg-stone-500">
                     Select Type
                   </option>
-                  {resCustomerType?.data.map((type: CustomerType) => (
-                    <option value={type.name}>{type.name}</option>
-                  ))}
+                  {resCustomerType?.data
+                    .sort((a: CustomerType, b: CustomerType) =>
+                      a.name.localeCompare(b.name)
+                    )
+                    .map((type: CustomerType) => (
+                      <option value={type.name}>{type.name}</option>
+                    ))}
                 </Field>
 
                 {/* error message for the input */}
@@ -188,31 +196,32 @@ const CustomersEdit = () => {
               </div>
 
               <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-              <label htmlFor="address">City:</label>
-              <Field
-                className=" px-2 py-1 rounded-md border-blue-300 border-2"
-                placeholder="City..."
-                name="address"
-                as="select"
-                id="address"
-              >
-                <option value={""} className="bg-stone-500">
-                  Select City
-                </option>
-                {resCity?.data.result.records.map((city: any) => (
-                 (city.city_name_en != " " &&(
-                  <option value={city._id}>{city.city_name_en}</option>
-                 ))
-                ))}
-              </Field>
+                <label htmlFor="address">City:</label>
+                <Field
+                  className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                  placeholder="City..."
+                  name="address"
+                  as="select"
+                  id="address"
+                >
+                  <option value={""} className="bg-stone-500">
+                    Select City
+                  </option>
+                  {resCity?.data.result.records.map(
+                    (city: any) =>
+                      city.city_name_en != " " && (
+                        <option value={city.city_name_en}>{city.city_name_en}</option>
+                      )
+                  )}
+                </Field>
 
-              {/* error message for the input */}
-              <ErrorMessage
-                name="address"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+                {/* error message for the input */}
+                <ErrorMessage
+                  name="address"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
 
               <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
                 <label htmlFor="gender">Gender:</label>
@@ -245,7 +254,7 @@ const CustomersEdit = () => {
                   placeholder="Date of birth..."
                   name="dateOfBirth"
                   type="date"
-                  id="address"
+                  id="dateOfBirth"
                 />
                 {/* error message for the input */}
                 <ErrorMessage

@@ -16,7 +16,7 @@ const AddCustomer = () => {
 
   const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
 
-  const {data: resCity } = useQuery("get city", () => City());
+  const { data: resCity } = useQuery("get city", () => City());
 
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -73,7 +73,6 @@ const AddCustomer = () => {
           type,
         }) => {
           setLoading(true); //show progress spinner
-        
 
           if (tz.length < 9) {
             // Add leading zeros to tz until it has 9 digits
@@ -103,10 +102,10 @@ const AddCustomer = () => {
             })
             .catch((error) => {
               Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
+                icon: "error",
+                title: "Oops...",
                 text: error.message,
-              })
+              });
             })
             .finally(() => {
               setLoading(false);
@@ -114,7 +113,7 @@ const AddCustomer = () => {
         }}
       >
         <Form>
-          {loading && <Spinner name="Puff" />}
+          {loading && <Spinner name="CirclesWithBar" />}
           <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
             <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="firstName">First name:</label>
@@ -213,9 +212,13 @@ const AddCustomer = () => {
                 <option value={""} className="bg-stone-500">
                   Select Type
                 </option>
-                {resCustomerType?.data.map((type: CustomerType) => (
-                  <option value={type.name}>{type.name}</option>
-                ))}
+                {resCustomerType?.data
+                  .sort((a: CustomerType, b: CustomerType) =>
+                    a.name.localeCompare(b.name)
+                  )
+                  .map((type: CustomerType) => (
+                    <option value={type.name}>{type.name}</option>
+                  ))}
               </Field>
 
               {/* error message for the input */}
@@ -238,11 +241,12 @@ const AddCustomer = () => {
                 <option value={""} className="bg-stone-500">
                   Select City
                 </option>
-                {resCity?.data.result.records.map((city: any) => (
-                 (city.city_name_en != " " &&(
-                  <option value={city._id}>{city.city_name_en}</option>
-                 ))
-                ))}
+                {resCity?.data.result.records.map(
+                  (city: any) =>
+                    city.city_name_en != " " && (
+                      <option value={city.city_name_en}>{city.city_name_en}</option>
+                    )
+                )}
               </Field>
 
               {/* error message for the input */}
@@ -284,7 +288,7 @@ const AddCustomer = () => {
                 placeholder="Date of birth..."
                 name="dateOfBirth"
                 type="date"
-                id="address"
+                id="dateOfBirth"
               />
               {/* error message for the input */}
               <ErrorMessage
@@ -301,7 +305,6 @@ const AddCustomer = () => {
               Save
             </button>
           </div>
-          
         </Form>
       </Formik>
     </>

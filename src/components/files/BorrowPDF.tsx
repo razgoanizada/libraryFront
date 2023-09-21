@@ -1,6 +1,5 @@
-import ReactPDF, {
+import {
   Document,
-  Image,
   Page,
   Text,
   View,
@@ -15,11 +14,11 @@ import {
   Customers,
 } from "../../service/library-service";
 import { Book, Borrow, Customer } from "../../@Typs";
-import logo from "../../images/logo.png";
+import Spinner from "../animations/Spinner";
 
 const BorrowPDF = () => {
   const { id } = useParams();
-  const { data: res } = useQuery("get librarian", () => BorrowIDRequest(id));
+  const { data: res, isLoading } = useQuery("get librarian", () => BorrowIDRequest(id));
   const borrow: Borrow | undefined = res?.data;
   const { data: resCustomers } = useQuery("get customers", () => Customers());
   const { data: resBooks } = useQuery("get books", () => Books());
@@ -35,7 +34,12 @@ const BorrowPDF = () => {
       textAlign: "center",
     },
   });
-  if (borrow?.id) {
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (borrow) {
     return (
       <div className="pdf mt-3 flex justify-center items-center">
         <PDFViewer width="80%" height="100%">

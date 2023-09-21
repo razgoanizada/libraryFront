@@ -273,7 +273,7 @@ const Borrowed = () => {
               {isLoading ? (
                 <Spinner name="Puff" />
               ) : (
-               <h5> No results have been found</h5>
+                <h5> No results have been found</h5>
               )}
             </div>
           )}

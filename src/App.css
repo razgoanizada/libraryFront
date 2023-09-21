@@ -10,7 +10,7 @@
 }
 
 .circle:hover {
-  transform: scale(1.1);
+  transform: scale(1.25);
   background-color: rgba(255, 255, 255, 1);
   color: black !important;
 }
@@ -100,3 +100,9 @@ th {
   }
 
 }
+
+::selection {
+  background-color: rgb(18, 130, 234);
+  color: #FFF;
+}
+
