@@ -6,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { LibraryContextProvider } from "./contexts/LibraryContext";
+import ErrorBoundary from "./Error";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,7 +19,9 @@ root.render(
     <BrowserRouter>
       <LibraryContextProvider>
         <AuthContextProvider>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </AuthContextProvider>
       </LibraryContextProvider>
     </BrowserRouter>

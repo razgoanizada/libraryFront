@@ -25,9 +25,11 @@ const BorrowSearch = ({
   handleSearch,
   handleReset,
 }: any) => {
-  const { data: resBooks } = useQuery("get books", () => Books());
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
-  const { data: resLibrarians } = useQuery("get librarians", () =>
+  const { data: resBooks } = useQuery("get all books", () => Books());
+  const { data: resCustomers } = useQuery("get all customers", () =>
+    Customers()
+  );
+  const { data: resLibrarians } = useQuery("get all librarians", () =>
     Librarians()
   );
 

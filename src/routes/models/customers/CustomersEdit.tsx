@@ -16,20 +16,24 @@ import { City } from "../../../service/address";
 
 const CustomersEdit = () => {
   const { id } = useParams();
-  const { data: res, isLoading } = useQuery("get customers", () => CustomerIDRequest(id));
+  const { data: res, isLoading } = useQuery("get customer", () =>
+    CustomerIDRequest(id)
+  );
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const customer: Customer | undefined = res?.data;
 
-  const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
+  const { data: resCustomerType } = useQuery("get all typs", () =>
+    CustomersType()
+  );
 
   const { data: resCity } = useQuery("get city", () => City());
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
-  if (customer) {
+  if (customer?.firstName && customer.lastName) {
     const validationSchema = Yup.object({
       firstName: Yup.string()
         .min(2, "First name must be at least 2 characters")
@@ -42,10 +46,9 @@ const CustomersEdit = () => {
       phone: Yup.string().min(9).max(11).required(),
       gender: Yup.string().required(),
       address: Yup.string(),
-      dateOfBirth: Yup.date().notRequired().max(
-        new Date(),
-        "Date of birth should be in the past"
-      ),
+      dateOfBirth: Yup.date()
+        .notRequired()
+        .max(new Date(), "Date of birth should be in the past"),
       type: Yup.string().required(),
     });
 
@@ -210,7 +213,9 @@ const CustomersEdit = () => {
                   {resCity?.data.result.records.map(
                     (city: any) =>
                       city.city_name_en != " " && (
-                        <option value={city.city_name_en}>{city.city_name_en}</option>
+                        <option value={city.city_name_en}>
+                          {city.city_name_en}
+                        </option>
                       )
                   )}
                 </Field>

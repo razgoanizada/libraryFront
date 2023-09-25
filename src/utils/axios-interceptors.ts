@@ -7,11 +7,9 @@ const client = axios.create({ baseURL: baseUrl });
 
 //middleware/interceptor:  catch the error => log it and re-throw
 const onFailure = (error: any) => {
-  
   const errorMessage = error?.response?.data?.message;
-  if(errorMessage == "Expired") {
-    logout()
-   
+  if (errorMessage == "Expired") {
+    logout();
   }
 
   throw new Error(error?.response?.data?.detail || "Unknown error occurred");

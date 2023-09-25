@@ -14,16 +14,26 @@ const Footer = () => {
       className="text-center text-lg-start text-muted mt-5"
     >
       <section className="d-flex justify-content-center p-4 border-bottom">
-       
-
         <div className="fs-1 links ">
-          <a href="https://api.whatsapp.com/send?phone=972524046007" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://api.whatsapp.com/send?phone=972524046007"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon color="success" fab icon="whatsapp" />
           </a>
-          <a href="https://www.linkedin.com/in/razgoanizada" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://www.linkedin.com/in/razgoanizada"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon color="primary" fab icon="linkedin" />
           </a>
-          <a href="https://github.com/razgoanizada" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://github.com/razgoanizada"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon color="dark" fab icon="github" />
           </a>
         </div>
@@ -48,7 +58,12 @@ const Footer = () => {
               <p> Intellj Idea </p>
             </MDBCol>
 
-            <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4 contact">
+            <MDBCol
+              md="4"
+              lg="3"
+              xl="3"
+              className="mx-auto mb-md-0 mb-4 contact"
+            >
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
               <p>
                 <MDBIcon color="secondary" icon="home" className="me-2" />
@@ -67,7 +82,9 @@ const Footer = () => {
 
               <p>
                 <MDBIcon color="secondary" icon="desktop" className="me-3" />
-                <a href="https://razgoanizada.com/" target="_blank">razgoanizada.com</a>
+                <a href="https://razgoanizada.com/" target="_blank">
+                  razgoanizada.com
+                </a>
               </p>
             </MDBCol>
           </MDBRow>

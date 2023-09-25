@@ -5,7 +5,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../images/logo.png";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import "./NavbarTop.css";
 import AuthContext from "../../contexts/AuthContext";
 import { HasPermission } from "../../utils/HasPermission";
 import Clock from "../animations/Clock";
@@ -45,9 +44,7 @@ const NavbarTop = () => {
               <NavDropdown.Item href="/customers">
                 List of customers
               </NavDropdown.Item>
-              <NavDropdown.Item href="/books">
-                List of books
-              </NavDropdown.Item>
+              <NavDropdown.Item href="/books">List of books</NavDropdown.Item>
               <NavDropdown.Item href="/customers-add">
                 Add a new customer
               </NavDropdown.Item>
@@ -63,10 +60,10 @@ const NavbarTop = () => {
                 id="navbarScrollingDropdown"
                 className=""
               >
-                <NavDropdown.Item href="/books-category">
-                  Book category
+                <NavDropdown.Item href="/book-categories">
+                  Book categories
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/customers-type">
+                <NavDropdown.Item href="/customers-types">
                   Types of customers
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/logs">List of logs</NavDropdown.Item>

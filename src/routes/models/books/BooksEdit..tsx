@@ -15,20 +15,22 @@ import { Helmet } from "react-helmet";
 
 const BooksEdit = () => {
   const { id } = useParams();
-  const { data: res, isLoading } = useQuery("get book", () => BookIDRequest(id));
+  const { data: res, isLoading } = useQuery("get book", () =>
+    BookIDRequest(id)
+  );
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const book: Book | undefined = res?.data;
 
-  const { data: resBookCategories } = useQuery("get categories", () =>
+  const { data: resBookCategories } = useQuery("get all categories", () =>
     BooksCategories()
   );
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
-  if (book) {
+  if (book?.name) {
     const validationSchema = Yup.object({
       description: Yup.string().min(15).max(250).required(),
       bookcase: Yup.number().min(10).max(99999).required(),

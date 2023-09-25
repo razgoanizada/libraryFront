@@ -5,8 +5,8 @@
   background-color: #2384ce;
   transition: transform 0.3s, background-color 0.3s;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  border: 2px solid #fff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #fff;
 }
 
 .circle:hover {
@@ -21,7 +21,7 @@
 
 a {
   text-decoration: none !important;
-  font-weight:bold;
+  font-weight: bold;
 }
 
 .add {
@@ -36,11 +36,13 @@ table {
   border-collapse: collapse;
 }
 
-.contact a , table a {
+.contact a,
+table a {
   color: black;
 }
 
-.contact a:hover , table a:hover {
+.contact a:hover,
+table a:hover {
   color: blue;
 }
 
@@ -86,7 +88,7 @@ th {
 }
 
 .pdf-col svg {
- fill: red;
+  fill: red;
 }
 
 .export-button svg {
@@ -94,15 +96,46 @@ th {
 }
 
 @media (max-width: 991px) {
- 
   .col-none {
     display: none;
   }
 
+  .custom-form-control::placeholder {
+    visibility: hidden !important;
+  }
+  .login {
+    height: 100vh;
+  }
 }
 
 ::selection {
   background-color: rgb(18, 130, 234);
-  color: #FFF;
+  color: #fff;
 }
 
+.menu-top {
+  background-color: #2384ce;
+}
+
+.links,
+#navbarScrollingDropdown {
+  color: white !important;
+  font-size: 20px;
+}
+
+.links:hover,
+#navbarScrollingDropdown:hover {
+  color: black !important;
+}
+
+.account .nav-link::after {
+  display: none;
+}
+
+.clock {
+  color: aliceblue;
+}
+
+.login-img {
+  height: 100vh;
+}

@@ -6,16 +6,19 @@ import {
   BookCategoriesDelete,
   BookCategoriesUpdate,
   BookCategoriesRequest,
+  BooksCategories,
 } from "../../../service/library-service";
-import { BookCategories } from "../../../@Typs";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
-import { MdModeEditOutline } from "react-icons/md";
-import { AiFillDelete } from "react-icons/ai";
-import { LuSearch } from "react-icons/lu";
 import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
+import AddCategoryDialog from "../../../components/dialogues/AddCategoryDialog";
+import CategorySearch from "../../../components/search/CategorySearch";
+import ErrorDialog from "../../../components/dialogues/ErrorDialog";
+import EditCategoryDialog from "../../../components/dialogues/EditCategoryDialog";
+import CategoryExcel from "../../../components/files/CategoryExcel";
+import CategoriesTable from "../../../components/tables/CategoriesTable";
+import PaginationButtons from "../../../components/tables/PaginationButtons";
 
 const BookCategory = () => {
   // States to manage category data
@@ -32,6 +35,10 @@ const BookCategory = () => {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+
+  const { data: resAllCategories } = useQuery("get all categories", () =>
+    BooksCategories()
+  );
 
   // Fetching categories from the server
   const { data: res } = useQuery(
@@ -88,7 +95,6 @@ const BookCategory = () => {
 
   const handleConfirmAdd = () => {
     if (newCategoryName.length < 2) {
-      
       setShowErrorDialog(true);
       setErrorMsg("The name must contain at least 2 characters");
       return;
@@ -142,7 +148,7 @@ const BookCategory = () => {
         setSelectedCategoryId(0);
         setSelectedCategoryName("");
         Swal.fire({
-          title: "Category successfully save",
+          title: "The category was successfully edited",
           icon: "success",
           timer: 2000,
         });
@@ -193,161 +199,90 @@ const BookCategory = () => {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Book category</title>
       </Helmet>
-    <div className="container mt-3">
-      <div className="flex flex-col">
-        <div className="flex">
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <button
-                className="add btn-primary py-2 px-2 rounded-lg"
-                onClick={handleOpenAddDialog}
-              >
-                <div className="flex items-center">
-                  <CgAdd className="w-6 h-6" />
-                  <span className="ml-2">Add</span>
-                </div>
-              </button>
+      <div className="container mt-3">
+        <div className="flex flex-col">
+          <div className="flex">
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <button
+                  className="add btn-primary py-2 px-2 rounded-lg"
+                  onClick={handleOpenAddDialog}
+                >
+                  <div className="flex items-center">
+                    <CgAdd className="w-6 h-6" />
+                    <span className="ml-2">Add</span>
+                  </div>
+                </button>
+              </div>
             </div>
+
+            <CategorySearch
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              handleSearch={handleSearch}
+            />
           </div>
 
-          <InputGroup className="search flex ms-5">
-            <FormControl
-              placeholder="Search categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-           <Button
-              variant="btn-search"
-              onClick={handleSearch}
-              className="search-icon"
-            >
-              <LuSearch size={30} />
-            </Button>
-          </InputGroup>
+          {res?.data.totalCategories > 0 ? (
+            <>
+              <div className="export-button">
+                <CategoryExcel data={resAllCategories?.data} />
+              </div>
+
+              <CategoriesTable
+                CategoriesData={res?.data.results}
+                handleOpenEditDialog={handleOpenEditDialog}
+                handleDelete={handleDelete}
+              />
+
+              <p className="mt-5">
+                Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
+                Showing {res?.data.pageSize} results per page
+              </p>
+
+              <PaginationButtons
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={res?.data.totalPages > res?.data.pageNo + 1}
+                hasPrevious={res?.data.pageNo > 0}
+              />
+            </>
+          ) : (
+            <div className="flex justify-center items-center mt-16 ">
+              {isLoading ? (
+                <Spinner name="Puff" />
+              ) : (
+                <h5> No results have been found</h5>
+              )}
+            </div>
+          )}
+
+          <AddCategoryDialog
+            showAddDialog={showAddDialog}
+            handleCloseAddDialog={handleCloseAddDialog}
+            handleConfirmAdd={handleConfirmAdd}
+            newCategoryName={newCategoryName}
+            setNewCategoryName={setNewCategoryName}
+          />
+
+          <EditCategoryDialog
+            showEditDialog={showEditDialog}
+            handleCloseEditDialog={handleCloseEditDialog}
+            handleConfirmEdit={handleConfirmEdit}
+            selectedCategoryName={selectedCategoryName}
+            setSelectedCategoryName={setSelectedCategoryName}
+          />
+
+          <ErrorDialog
+            show={showErrorDialog}
+            onClose={() => setShowErrorDialog(false)}
+            errorMsg={errorMsg}
+          />
         </div>
-
-        {res?.data.totalCategories > 0 ? (
-          <>
-            <table className="mt-4">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {res?.data.results.map((category: BookCategories) => (
-                  <tr key={category.id}>
-                    <td>{category.name}</td>
-                    <td>
-                      <button
-                        className="edit"
-                        onClick={() =>
-                          handleOpenEditDialog(category.name, category.id)
-                        }
-                      >
-                        <MdModeEditOutline size={30} />
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="delete"
-                        onClick={() => handleDelete(category.name, category.id)}
-                      >
-                        <AiFillDelete size={30} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-5">
-              Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
-              Showing {res?.data.pageSize} results per page
-            </p>
-            <div>
-              {res?.data.totalPages > res?.data.pageNo + 1 && (
-                <Button onClick={nextPage} className="me-3">
-                  Next Page
-                </Button>
-              )}
-              {res?.data.pageNo > 0 && (
-                <Button onClick={previousPage}>Previous Page</Button>
-              )}
-            </div>
-          </>
-        ) : (
-          <div>
-            {isLoading ? <Spinner name="Puff" /> : "No results have been found"}
-          </div>
-        )}
-
-        {/* Dialog add  */}
-
-        <Modal show={showAddDialog} onHide={handleCloseAddDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormControl
-              placeholder="Enter category name..."
-              value={newCategoryName}
-              onChange={(e) => 
-                setNewCategoryName(e.target.value)}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseAddDialog}>
-              Cancel
-            </Button>
-            <Button className="save" onClick={handleConfirmAdd}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Dialog edit  */}
-
-        <Modal show={showEditDialog} onHide={handleCloseEditDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormControl
-              placeholder="Enter category name..."
-              value={selectedCategoryName}
-              onChange={(e) => setSelectedCategoryName(e.target.value)}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseEditDialog}>
-              Cancel
-            </Button>
-            <Button className="save" onClick={handleConfirmEdit}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={showErrorDialog} onHide={() => setShowErrorDialog(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{errorMsg}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowErrorDialog(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
-    </div>
     </>
   );
 };

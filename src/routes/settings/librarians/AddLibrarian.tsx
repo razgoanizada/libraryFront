@@ -13,7 +13,7 @@ const AddLibrarian = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {data: resCity } = useQuery("get city", () => City());
+  const { data: resCity } = useQuery("get city", () => City());
 
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -64,34 +64,13 @@ const AddLibrarian = () => {
 
   return (
     <>
-     <Helmet>
+      <Helmet>
         <title>Add Librarian</title>
       </Helmet>
-    <Formik
-      validationSchema={validationSchema}
-      initialValues={intiailValues}
-      onSubmit={({
-        firstName,
-        lastName,
-        userName,
-        password,
-        email,
-        phone,
-        tz,
-        address,
-        dateOfBirth,
-        gender,
-        permission,
-      }) => {
-        setLoading(true); //show progress spinner
-
-        if (tz.length < 9) {
-          // Add leading zeros to tz until it has 9 digits
-          tz = tz.padStart(9, "0");
-        }
-
-        const formattedDateOfBirth = new Date(dateOfBirth);
-        LibrarianAdd(
+      <Formik
+        validationSchema={validationSchema}
+        initialValues={intiailValues}
+        onSubmit={({
           firstName,
           lastName,
           userName,
@@ -100,133 +79,158 @@ const AddLibrarian = () => {
           phone,
           tz,
           address,
-          formattedDateOfBirth,
+          dateOfBirth,
           gender,
-          permission
-        )
-          .then(() => {
-            Swal.fire({
-              title: "Librarian successfully added",
-              icon: "success",
-              timer: 2000,
-            });
-            //navigate
-            nav("/librarians");
-          })
-          .catch((error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: error.message,
+          permission,
+        }) => {
+          setLoading(true); //show progress spinner
+
+          if (tz.length < 9) {
+            // Add leading zeros to tz until it has 9 digits
+            tz = tz.padStart(9, "0");
+          }
+
+          const formattedDateOfBirth = new Date(dateOfBirth);
+          LibrarianAdd(
+            firstName,
+            lastName,
+            userName,
+            password,
+            email,
+            phone,
+            tz,
+            address,
+            formattedDateOfBirth,
+            gender,
+            permission
+          )
+            .then(() => {
+              Swal.fire({
+                title: "Librarian successfully added",
+                icon: "success",
+                timer: 2000,
+              });
+              //navigate
+              nav("/librarians");
             })
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }}
-    >
-      <Form>
-        {loading && <Spinner name="Puff" />}
-        <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="firstName">First name:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="First name..."
-              name="firstName"
-              type="text"
-              id="firstName"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="firstName"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            .catch((error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: error.message,
+              });
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }}
+      >
+        <Form>
+          {loading && <Spinner name="CirclesWithBar" />}
+          <div className="bg-white shadow-md rounded-lg my-2 w-1/2 mx-auto p-4 flex flex-col gap-2">
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="firstName">First name:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="First name..."
+                name="firstName"
+                type="text"
+                id="firstName"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="firstName"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="lastName">Last name:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="Last name..."
-              name="lastName"
-              type="text"
-              id="lastName"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="lastName"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="lastName">Last name:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="Last name..."
+                name="lastName"
+                type="text"
+                id="lastName"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="lastName"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="userName">User name:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="User name..."
-              name="userName"
-              type="text"
-              id="userName"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="userName"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="userName">User name:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="User name..."
+                name="userName"
+                type="text"
+                id="userName"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="userName"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-2 flex flex-col">
-            <label htmlFor="email">Email:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="email..."
-              name="email"
-              type="email"
-              id="email"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="email"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className="font-extralight text-lg  my-2 form-group  gap-2 flex flex-col">
+              <label htmlFor="email">Email:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="email..."
+                name="email"
+                type="email"
+                id="email"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="phone">Phone:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="Phone..."
-              name="phone"
-              type="text"
-              id="phone"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="phone"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="phone">Phone:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="Phone..."
+                name="phone"
+                type="text"
+                id="phone"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="phone"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="tz">ID:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="ID..."
-              name="tz"
-              type="string"
-              id="tz"
-            />
-            {/* error message for the input */}
-            <ErrorMessage name="tz" component="div" className="text-red-500" />
-          </div>
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="tz">ID:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="ID..."
+                name="tz"
+                type="string"
+                id="tz"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="tz"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
               <label htmlFor="address">City:</label>
               <Field
                 className=" px-2 py-1 rounded-md border-blue-300 border-2"
@@ -238,11 +242,14 @@ const AddLibrarian = () => {
                 <option value={""} className="bg-stone-500">
                   Select City
                 </option>
-                {resCity?.data.result.records.map((city: any) => (
-                 (city.city_name_en != " " &&(
-                  <option value={city._id}>{city.city_name_en}</option>
-                 ))
-                ))}
+                {resCity?.data.result.records.map(
+                  (city: any) =>
+                    city.city_name_en != " " && (
+                      <option value={city.city_name_en}>
+                        {city.city_name_en}
+                      </option>
+                    )
+                )}
               </Field>
 
               {/* error message for the input */}
@@ -253,99 +260,99 @@ const AddLibrarian = () => {
               />
             </div>
 
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="permission">Permission:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="Permission..."
-              name="permission"
-              as="select"
-              id="permission"
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="permission">Permission:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="Permission..."
+                name="permission"
+                as="select"
+                id="permission"
+              >
+                <option value={""} className="bg-stone-500">
+                  Select
+                </option>
+                <option value="simple">Simple</option>
+                <option value="pro">Pro</option>
+                <option value="admin">Admin</option>
+              </Field>
+
+              {/* error message for the input */}
+              <ErrorMessage
+                name="permission"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="gender">Gender:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="Gender..."
+                name="gender"
+                as="select"
+                id="gender"
+              >
+                <option value={""} className="bg-stone-500">
+                  Select
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </Field>
+
+              {/* error message for the input */}
+              <ErrorMessage
+                name="gender"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
+              <label htmlFor="dateOfBirth">Date of birth:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="Date of birth..."
+                name="dateOfBirth"
+                type="date"
+                id="address"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="dateOfBirth"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="font-extralight text-lg my-2 form-group  gap-2 flex flex-col">
+              <label htmlFor="password">Password:</label>
+              <Field
+                className=" px-2 py-1 rounded-md border-blue-300 border-2"
+                placeholder="password..."
+                autoComplete="new-password"
+                name="password"
+                type="password"
+                id="password"
+              />
+              {/* error message for the input */}
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <button
+              disabled={loading}
+              className="disabled:bg-gray-400 rounded text-white px-3 py-2 w-full bg-green-600"
             >
-              <option value={""} className="bg-stone-500">
-                Select
-              </option>
-              <option value="simple">Simple</option>
-              <option value="pro">Pro</option>
-              <option value="admin">Admin</option>
-            </Field>
-
-            {/* error message for the input */}
-            <ErrorMessage
-              name="permission"
-              component="div"
-              className="text-red-500"
-            />
+              Save
+            </button>
           </div>
-
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="gender">Gender:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="Gender..."
-              name="gender"
-              as="select"
-              id="gender"
-            >
-              <option value={""} className="bg-stone-500">
-                Select
-              </option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </Field>
-
-            {/* error message for the input */}
-            <ErrorMessage
-              name="gender"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-
-          <div className="font-extralight text-lg  my-2 form-group  gap-1 flex flex-col">
-            <label htmlFor="dateOfBirth">Date of birth:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="Date of birth..."
-              name="dateOfBirth"
-              type="date"
-              id="address"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="dateOfBirth"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-
-          <div className="font-extralight text-lg my-2 form-group  gap-2 flex flex-col">
-            <label htmlFor="password">Password:</label>
-            <Field
-              className=" px-2 py-1 rounded-md border-blue-300 border-2"
-              placeholder="password..."
-              autoComplete="new-password"
-              name="password"
-              type="password"
-              id="password"
-            />
-            {/* error message for the input */}
-            <ErrorMessage
-              name="password"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-
-          <button
-            disabled={loading}
-            className="disabled:bg-gray-400 rounded text-white px-3 py-2 w-full bg-green-600"
-          >
-            Save
-          </button>
-        </div>
-      </Form>
-    </Formik>
+        </Form>
+      </Formik>
     </>
   );
 };

@@ -26,8 +26,8 @@ const CustomersSearch = ({
   handleSearch,
   handleReset,
 }: any) => {
-  const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
-  const { data: resLibrarians } = useQuery("get librarians", () =>
+  const { data: resCustomerType } = useQuery("get all typs", () => CustomersType());
+  const { data: resLibrarians } = useQuery("get all librarians", () =>
     Librarians()
   );
 

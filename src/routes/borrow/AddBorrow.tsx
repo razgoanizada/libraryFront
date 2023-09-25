@@ -13,9 +13,11 @@ const AddBorrow = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { data: resBook } = useQuery("get books", () => Books());
+  const { data: resBook } = useQuery("get all books", () => Books());
 
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
+  const { data: resCustomers } = useQuery("get all customers", () =>
+    Customers()
+  );
 
   const validationSchema = Yup.object({
     customer: Yup.number().min(1, "customer is a required field").required(),
@@ -144,7 +146,7 @@ const AddBorrow = () => {
                       book.borrows[book.borrows.length - 1].returnBook
                   ) && (
                     <option value="" className="bg-stone-500">
-                       All books are currently being borrowed
+                      All books are currently being borrowed
                     </option>
                   )}
               </Field>

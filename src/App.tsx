@@ -5,9 +5,9 @@ import AuthContext from "./contexts/AuthContext";
 import Home from "./routes/general/Home";
 import NotFound from "./routes/general/NotFound";
 import About from "./routes/general/About";
-import NavbarTop from "./components/navbartop/NavbarTop";
+import NavbarTop from "./components/footer and navbar/NavbarTop";
 import { HasPermission } from "./utils/HasPermission";
-import Login from "./routes/login/Login";
+import Login from "./routes/general/Login";
 import AddLibrarian from "./routes/settings/librarians/AddLibrarian";
 import Unauthorized from "./routes/general/Unauthorized";
 import AddBook from "./routes/models/books/AddBook";
@@ -28,7 +28,7 @@ import ChangePassword from "./routes/general/ChangePassword";
 import Borrowed from "./routes/borrow/Borrowed ";
 import Overdue from "./routes/borrow/Overdue";
 import AddBorrow from "./routes/borrow/AddBorrow";
-import Footer from "./components/footer/Footer";
+import Footer from "./components/footer and navbar/Footer";
 import BorrowPDF from "./components/files/BorrowPDF";
 
 const App = () => {
@@ -45,7 +45,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="bg-slate-50 border">
       {isLoggedIn && <NavbarTop />}
       {isLoggedIn && (
         <Routes>
@@ -101,13 +101,13 @@ const App = () => {
               }
             />
             <Route
-              path="/books-category"
+              path="/book-categories"
               element={
                 HasPermission("admin") ? <BookCategory /> : <Unauthorized />
               }
             />
             <Route
-              path="/customers-type"
+              path="/customers-types"
               element={
                 HasPermission("admin") ? <CustomersType /> : <Unauthorized />
               }
@@ -121,7 +121,7 @@ const App = () => {
         </Routes>
       )}
       {isLoggedIn && <Footer />}
-    </>
+    </div>
   );
 };
 export default App;

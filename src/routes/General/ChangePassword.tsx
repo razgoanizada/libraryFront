@@ -64,9 +64,9 @@ const ChangePassword = () => {
         }}
       >
         <Form>
-          {loading && <Spinner name="Puff" />}
+          {loading && <Spinner name="CirclesWithBar" />}
           <div className="bg-white shadow-md rounded-lg my-5 w-1/2 mx-auto p-4 flex flex-col gap-2">
-            <div className="font-extralight text-lg my-2 form-group  gap-2 flex flex-col">
+            <div className="font-extralight text-lg my-5 form-group  gap-2 flex flex-col">
               <label htmlFor="password">Password:</label>
               <Field
                 className=" px-2 py-1 rounded-md border-blue-300 border-2"

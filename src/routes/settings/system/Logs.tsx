@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import LibraryContext from "../../../contexts/LibraryContext";
 import { useQuery } from "react-query";
-import { LogsRequest } from "../../../service/library-service";
-import { Log } from "../../../@Typs";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
-import { LuSearch } from "react-icons/lu";
+import { AllLogs, LogsRequest } from "../../../service/library-service";
 import Spinner from "../../../components/animations/Spinner";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Helmet } from "react-helmet";
+import LogsSearch from "../../../components/search/LogsSearch";
+import LogsExcel from "../../../components/files/LogsExcel";
+import LogsTable from "../../../components/tables/LogsTable";
+import PaginationButtons from "../../../components/tables/PaginationButtons";
 
 const Logs = () => {
   // States to manage log data
@@ -19,6 +19,8 @@ const Logs = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [dateStart, setDateStart] = useState<string>("");
   const [dateEnd, setDateEnd] = useState<string>("");
+
+  const { data: resAllLogs } = useQuery("get all logs", () => AllLogs());
 
   // Fetching logs from the server
   const { data: res } = useQuery(
@@ -57,11 +59,19 @@ const Logs = () => {
   const handleSearch = () => {
     setCurrentPage(0);
     setPageLoading(true);
-    
+
     LogsRequest(0, username, isLogin, dateStart, dateEnd).then((res) => {
       setLogsPage(res.data);
       setPageLoading(false);
     });
+  };
+
+  const handleReset = () => {
+    setUsername("");
+    setIsLogin(true);
+    setDateStart("");
+    setDateEnd("");
+    handleSearch();
   };
 
   // Function to handle the change in the select dropdown
@@ -75,99 +85,57 @@ const Logs = () => {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Logs</title>
       </Helmet>
-    <div className="container mt-3">
-      <div className="flex flex-col">
-        <div className="flex">
-          <InputGroup className="search d-flex">
-            <FormControl
-              placeholder="Search user name..."
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+      <div className="container mt-3">
+        <div className="flex flex-col">
+          <div className="flex">
+            <LogsSearch
+              username={username}
+              setUsername={setUsername}
+              handleSearch={handleSearch}
+              isLogin={isLogin}
+              handleIsLoginChange={handleIsLoginChange}
+              dateStart={dateStart}
+              setDateStart={setDateStart}
+              dateEnd={dateEnd}
+              setDateEnd={setDateEnd}
+              handleReset={handleReset}
             />
-             <div className="d-none d-md-flex align-items-center mx-4">Is Login:</div>
-            <FormControl
-              as="select"
-              placeholder="Is Login"
-              className="d-none d-md-flex"
-              value={isLogin.toString()}
-              onChange={handleIsLoginChange}
-            >
-              <option value={"true"}>true</option>
-              <option value={"false"}>false</option>
-            </FormControl>
-           
-            <DatePicker
-             className="form-control d-none d-lg-flex mx-4"
-            selected={dateStart !== "" ? new Date(dateStart) : null}
-            onChange={(date) => setDateStart(date ? date.toISOString().split("T")[0] : "")}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select a start date" 
-          />
-          <DatePicker
-            className="form-control d-none d-lg-flex mx-2"
-            selected={dateEnd !== "" ? new Date(dateEnd) : null}
-            onChange={(date) => setDateEnd(date ? date.toISOString().split("T")[0] : "")}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select a end date"
-          />
-          
-            <Button
-              variant="btn-search"
-              onClick={handleSearch}
-              className="search-icon"
-            >
-              <LuSearch size={30} />
-            </Button>
-          </InputGroup>
-        </div>
+          </div>
 
-        {res?.data.totalLogs > 0 ? (
-          <>
-            <table className="mt-4">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Log In?</th>
-                  <th>Date</th>
-                  <th>Ip Address</th>
-                </tr>
-              </thead>
-              <tbody>
-                {res?.data.results.map((log: Log) => (
-                  <tr key={log.id}>
-                    <td>{log.username}</td>
-                   <td> {log.login.toString()}</td>
-                    <td>{log.loginDate.toString()}</td>
-                    <td>{log.ipAddress}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-5">
-              Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
-              Showing {res?.data.pageSize} results per page
-            </p>
-            <div>
-              {res?.data.totalPages > res?.data.pageNo + 1 && (
-                <Button onClick={nextPage} className="me-3">
-                  Next Page
-                </Button>
-              )}
-              {res?.data.pageNo > 0 && (
-                <Button onClick={previousPage}>Previous Page</Button>
+          {res?.data.totalLogs > 0 ? (
+            <>
+              <div className="export-button">
+                <LogsExcel data={resAllLogs?.data} />
+              </div>
+
+              <LogsTable logsData={res?.data.results} />
+
+              <p className="mt-5">
+                Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
+                Showing {res?.data.pageSize} results per page
+              </p>
+
+              <PaginationButtons
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={res?.data.totalPages > res?.data.pageNo + 1}
+                hasPrevious={res?.data.pageNo > 0}
+              />
+            </>
+          ) : (
+            <div className="flex justify-center items-center mt-16 ">
+              {isLoading ? (
+                <Spinner name="Puff" />
+              ) : (
+                <h5> No results have been found</h5>
               )}
             </div>
-          </>
-        ) : (
-          <div>
-            {isLoading ? <Spinner name="Puff" /> : "No results have been found"}
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };

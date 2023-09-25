@@ -1,10 +1,7 @@
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { LuSearch } from "react-icons/lu";
 import { useQuery } from "react-query";
-import {
-  BooksCategories,
-  Librarians,
-} from "../../service/library-service";
+import { BooksCategories, Librarians } from "../../service/library-service";
 import { BookCategories, Librarian } from "../../@Typs";
 import { FcSearch } from "react-icons/fc";
 
@@ -24,10 +21,10 @@ const BooksSearch = ({
   handleSearch,
   handleReset,
 }: any) => {
-  const { data: resBookCategories } = useQuery("get categories", () =>
+  const { data: resBookCategories } = useQuery("get all categories", () =>
     BooksCategories()
   );
-  const { data: resLibrarians } = useQuery("get librarians", () =>
+  const { data: resLibrarians } = useQuery("get all librarians", () =>
     Librarians()
   );
 

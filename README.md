@@ -1,46 +1,21 @@
-# Getting Started with Create React App
+# Library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+(https://library.razgoanizada.com/).
+<![home](./src/images/home.PNG)>
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+This is a front-end project in React that introduces system management of a library.
+Through the system, you can manage your borrowed books to customers.
+You can also manage your books, customers and users.
+You can export the data to an Excel or PDF file.
+* The system is compatible with all types of devices.
 
-### `npm start`
+<![about](./src/images/about.PNG)>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `Permissions`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+In the system you can find 3 types of permissions:
+Simple: can borrow books, manage the customer list and view the book list.
+Professional: In addition, can also manage the book list (add or edit / delete a book).
+Admin: full access to the system, can manage the list of users, the book categories and the customer base.

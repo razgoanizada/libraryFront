@@ -89,6 +89,7 @@ export const CustomerTypeUpdate = (days: number, amount: number, id: number) =>
   });
 
 // logs
+export const AllLogs = () => request({ url: `/logs` });
 
 export const LogsRequest = (
   pageNo: number,
@@ -365,23 +366,6 @@ export const CustomerIDRequest = (id: any) =>
     url: `/customers/${id}`,
   });
 
-// librarian details
-
-export const BorrowsLibrarian = (addedBy: any) =>
-  request({
-    url: `/borrow/page?pageSize=${5}&addedBy=${addedBy}`,
-  });
-
-export const CustomersLibrarian = (addedBy: any) =>
-  request({
-    url: `/customers/page?pageSize=${5}&addedBy=${addedBy}`,
-  });
-
-export const BooksLibrarian = (addedBy: any) =>
-  request({
-    url: `/books/page?pageSize=${5}&addedBy=${addedBy}`,
-  });
-
 // borrow
 
 export const Borrow = () => request({ url: `/borrow` });
@@ -401,11 +385,14 @@ export const BorrowRequest = (
     url: `/borrow/page?pageNo=${pageNo}&customerId=${customerId}&bookId=${bookId}&addedBy=${addedBy}&returnBook=${returnBook}&borrowingDateStart=${borrowingDateStart}&borrowingDateEnd=${borrowingDateEnd}&returnDateStart=${returnDateStart}&returnDateEnd=${returnDateEnd}`,
   });
 
-  export const OverdueRequest = () => request ({
-    url: `/borrow/page?returnDateEnd=${new Date().toISOString().split("T")[0]}&pageSize=1000`
-  })
+export const OverdueRequest = () =>
+  request({
+    url: `/borrow/page?returnDateEnd=${
+      new Date().toISOString().split("T")[0]
+    }&pageSize=1000`,
+  });
 
-  export const hasReturnBook = (id: number) =>
+export const hasReturnBook = (id: number) =>
   request({
     url: `/borrow/return-book/${id}`,
     method: "PUT",
@@ -414,7 +401,7 @@ export const BorrowRequest = (
     },
   });
 
-  export const ExtraTime = (id: number, days: number) =>
+export const ExtraTime = (id: number, days: number) =>
   request({
     url: `/borrow/extra-time/${id}`,
     method: "PUT",
@@ -426,7 +413,7 @@ export const BorrowRequest = (
     },
   });
 
-  export const BorrowAdd = (customerId: number, bookId: number) =>
+export const BorrowAdd = (customerId: number, bookId: number) =>
   request({
     url: `/borrow/add`,
     method: "POST",
@@ -435,11 +422,11 @@ export const BorrowRequest = (
     },
     data: {
       customerId: customerId,
-      bookId: bookId
+      bookId: bookId,
     },
   });
 
-  export const BorrowIDRequest = (id: any) =>
+export const BorrowIDRequest = (id: any) =>
   request({
     url: `/borrow/${id}`,
   });

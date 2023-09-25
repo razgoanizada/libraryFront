@@ -30,7 +30,9 @@ const Overdue = () => {
   const [days, setDays] = useState<number | "">("");
   const [selectedBorrowId, setSelectedBorrowId] = useState<number>(0);
 
-  const { data: resAllOverdue } = useQuery("get all overdue", () => OverdueRequest());
+  const { data: resAllOverdue } = useQuery("get all overdue", () =>
+    OverdueRequest()
+  );
 
   // Fetching borrow from the server
   const { data: res } = useQuery(

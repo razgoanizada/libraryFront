@@ -13,7 +13,7 @@ const AddBook = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { data: resBookCategories } = useQuery("get categories", () =>
+  const { data: resBookCategories } = useQuery("get all categories", () =>
     BooksCategories()
   );
 

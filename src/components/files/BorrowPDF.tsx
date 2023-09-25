@@ -18,10 +18,14 @@ import Spinner from "../animations/Spinner";
 
 const BorrowPDF = () => {
   const { id } = useParams();
-  const { data: res, isLoading } = useQuery("get librarian", () => BorrowIDRequest(id));
+  const { data: res, isLoading } = useQuery("get borrow", () =>
+    BorrowIDRequest(id)
+  );
   const borrow: Borrow | undefined = res?.data;
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
-  const { data: resBooks } = useQuery("get books", () => Books());
+  const { data: resCustomers } = useQuery("get all customers", () =>
+    Customers()
+  );
+  const { data: resBooks } = useQuery("get all books", () => Books());
 
   const styles = StyleSheet.create({
     page: {
@@ -36,14 +40,14 @@ const BorrowPDF = () => {
   });
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
   if (borrow) {
     return (
       <div className="pdf mt-3 flex justify-center items-center">
         <PDFViewer width="80%" height="100%">
-        <Document title={`Borrowing book number ${borrow.id}`}>
+          <Document title={`Borrowing book number ${borrow.id}`}>
             <Page size="A4">
               <View style={styles.page}>
                 <View style={styles.section}>
@@ -89,23 +93,21 @@ const BorrowPDF = () => {
                   {borrow.addedByUserName}
                 </Text>
               </View>
-              
+
               <View style={styles.section}>
                 <Text>
-                Return date: <br /> <br />
+                  Return date: <br /> <br />
                   {borrow.returnDate.toString()}
                 </Text>
               </View>
 
               <View style={styles.section}>
                 <Text>
-                Customer's signature: <br /> <br />
-                ________________________
+                  Customer's signature: <br /> <br />
+                  ________________________
                 </Text>
               </View>
-              
             </Page>
-           
           </Document>
         </PDFViewer>
       </div>

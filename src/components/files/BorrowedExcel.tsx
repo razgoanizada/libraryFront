@@ -5,8 +5,8 @@ import { Books, Customers } from "../../service/library-service";
 import { FaRegFileExcel } from "react-icons/fa";
 
 const BorrowedExcel = ({ data }: any) => {
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
-  const { data: resBooks } = useQuery("get books", () => Books());
+  const { data: resCustomers } = useQuery("get all customers", () => Customers());
+  const { data: resBooks } = useQuery("get all books", () => Books());
 
   const exportToExcel = () => {
     const excelData = [];
@@ -39,8 +39,8 @@ const BorrowedExcel = ({ data }: any) => {
             (customer: Customer) => customer.id === borrow.customerId
           )?.lastName || ""
         }`,
-        borrow.borrowingDate.toString(),
-        borrow.returnDate.toString(),
+        borrow.borrowingDate ?  borrow.borrowingDate.toString() : "",
+        borrow.returnDate ?  borrow.returnDate.toString() : "",
         borrow.addedByUserName,
         borrow.returnBook ? "Yes" : "No",
         borrow.returnedOn ? borrow.returnedOn.toString() : "not returned",

@@ -14,7 +14,9 @@ const AddCustomer = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { data: resCustomerType } = useQuery("get typs", () => CustomersType());
+  const { data: resCustomerType } = useQuery("get all typs", () =>
+    CustomersType()
+  );
 
   const { data: resCity } = useQuery("get city", () => City());
 
@@ -244,7 +246,9 @@ const AddCustomer = () => {
                 {resCity?.data.result.records.map(
                   (city: any) =>
                     city.city_name_en != " " && (
-                      <option value={city.city_name_en}>{city.city_name_en}</option>
+                      <option value={city.city_name_en}>
+                        {city.city_name_en}
+                      </option>
                     )
                 )}
               </Field>

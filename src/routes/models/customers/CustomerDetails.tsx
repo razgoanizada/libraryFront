@@ -13,8 +13,10 @@ import Spinner from "../../../components/animations/Spinner";
 
 const CustomerDetails = () => {
   const { id } = useParams();
-  const { data: res, isLoading } = useQuery("get customer", () => CustomerIDRequest(id));
-  const { data: resBooks } = useQuery("get books", () => Books());
+  const { data: res, isLoading } = useQuery("get customer", () =>
+    CustomerIDRequest(id)
+  );
+  const { data: resBooks } = useQuery("get all books", () => Books());
 
   const { data: resAllBorrowsReturned } = useQuery("get borrowed", () =>
     BorrowRequest(0, id || "0", "", "", true, "", "", "", "")
@@ -28,10 +30,10 @@ const CustomerDetails = () => {
   const customer: Customer | undefined = res?.data;
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
-  if (customer) {
+  if (customer?.firstName && customer.lastName) {
     return (
       <>
         <Helmet>
@@ -59,7 +61,7 @@ const CustomerDetails = () => {
               </tr>
               <tr>
                 <th className="bg-white">Gender: </th>
-                <td>{customer.gender.toString()} </td>
+                <td>{customer.gender?.toString() || ""} </td>
               </tr>
               <tr>
                 <th className="bg-white">City: </th>
@@ -91,6 +93,13 @@ const CustomerDetails = () => {
                   {customer.dateOfBirth ? customer.dateOfBirth.toString() : ""}{" "}
                 </td>
               </tr>
+              <tr>
+                <th className="bg-white">Amount of books he borrowed</th>
+                <td>
+                  {resAllBorrowsNotReturned?.data.totalBorrowed +
+                    resAllBorrowsReturned?.data.totalBorrowed}
+                </td>
+              </tr>
             </table>
 
             <h2 className="p-3 mt-3 font-thin">
@@ -106,7 +115,7 @@ const CustomerDetails = () => {
                     <th>Book</th>
                     <th>Borrowed on</th>
                     <th className="col-none">Librarian</th>
-                    <th>Returned on</th>
+                    <th>Return date</th>
                     <th>PDF</th>
                   </tr>
                 </thead>
@@ -133,9 +142,9 @@ const CustomerDetails = () => {
                         <td className="col-none">{borrow.addedByUserName}</td>
                         <td>
                           {" "}
-                          {borrow.returnedOn
-                            ? borrow.returnedOn.toString()
-                            : "not returned"}{" "}
+                          {borrow.returnDate
+                            ? borrow.returnDate.toString()
+                            : ""}
                         </td>
                         <td className="pdf-col">
                           <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
@@ -167,7 +176,6 @@ const CustomerDetails = () => {
                     <th>Borrowed on</th>
                     <th className="col-none">Librarian</th>
                     <th>Returned on</th>
-                    <th>PDF</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -195,11 +203,6 @@ const CustomerDetails = () => {
                         {borrow.returnedOn
                           ? borrow.returnedOn.toString()
                           : "not returned"}{" "}
-                      </td>
-                      <td className="pdf-col">
-                        <Link to={`/borrow-pdf/${borrow.id}`} key={borrow.id}>
-                          <BsFilePdf size={30} />
-                        </Link>
                       </td>
                     </tr>
                   ))}

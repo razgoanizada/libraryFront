@@ -10,8 +10,10 @@ const BorrowedTable = ({
   handleReturnBook,
   handleOpenExtraDialog,
 }: any) => {
-  const { data: resCustomers } = useQuery("get customers", () => Customers());
-  const { data: resBooks } = useQuery("get books", () => Books());
+  const { data: resCustomers } = useQuery("get all customers", () =>
+    Customers()
+  );
+  const { data: resBooks } = useQuery("get all books", () => Books());
 
   return (
     <table className="mt-4">
@@ -96,8 +98,8 @@ const BorrowedTable = ({
             <td>
               {!borrow.returnBook ? (
                 <button onClick={() => handleReturnBook(borrow.id)}>
-                <Button variant="success">Return</Button> 
-              </button>
+                  <Button variant="success">Return</Button>
+                </button>
               ) : (
                 ""
               )}

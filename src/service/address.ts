@@ -5,19 +5,16 @@ const baseUrl = "https://data.gov.il/api/3";
 const client = axios.create({ baseURL: baseUrl });
 
 const onFailure = (error: any) => {
-  
-    throw error
-  };
-  
-  const onSuccess = (res: AxiosResponse) => {
-  
-    return res;
-  };
+  throw error;
+};
+
+const onSuccess = (res: AxiosResponse) => {
+  return res;
+};
 
 export const request = (config: AxiosRequestConfig) => {
-    
-    return client(config).catch(onFailure).then(onSuccess);
-}
+  return client(config).catch(onFailure).then(onSuccess);
+};
 
 export const City = () =>
   request({

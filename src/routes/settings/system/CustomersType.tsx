@@ -6,16 +6,19 @@ import {
   CustomerTypeDelete,
   CustomerTypeAdd,
   CustomerTypeUpdate,
+  CustomersType as CustomersTypes,
 } from "../../../service/library-service";
-import { CustomerType } from "../../../@Typs";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { CgAdd } from "react-icons/cg";
-import { MdModeEditOutline } from "react-icons/md";
-import { AiFillDelete } from "react-icons/ai";
-import { LuSearch } from "react-icons/lu";
 import Spinner from "../../../components/animations/Spinner";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
+import TypeSearch from "../../../components/search/TypeSearch";
+import AddTypeDialog from "../../../components/dialogues/AddTypeDialog";
+import TypeExcel from "../../../components/files/TypeExcel";
+import ErrorDialog from "../../../components/dialogues/ErrorDialog";
+import EditTypeDialog from "../../../components/dialogues/EditTypeDialog";
+import TypesTable from "../../../components/tables/TypesTable";
+import PaginationButtons from "../../../components/tables/PaginationButtons";
 
 const CustomersType = () => {
   // States to manage type data
@@ -37,6 +40,10 @@ const CustomersType = () => {
   const [selectedTypeDays, setSelectedTypeDays] = useState<number>(0);
   const [selectedTypeAmount, setSelectedTypeAmount] = useState<number>(0);
   const [selectedTypeId, setSelectedTypeId] = useState<number>(0);
+
+  const { data: resAllTypes } = useQuery("get all typs", () =>
+    CustomersTypes()
+  );
 
   // Fetching types from the server
   const { data: res } = useQuery(
@@ -79,6 +86,13 @@ const CustomersType = () => {
       setTypsPage(res.data);
       setPageLoading(false);
     });
+  };
+
+  const handleReset = () => {
+    setName("");
+    setDays("");
+    setAmount("");
+    handleSearch();
   };
 
   // Functions to manage Add type dialog
@@ -183,7 +197,7 @@ const CustomersType = () => {
         setPageLoading(false);
         setSelectedTypeId(0);
         Swal.fire({
-          title: "Type successfully save",
+          title: "The category was successfully edited",
           icon: "success",
           timer: 2000,
         });
@@ -234,205 +248,101 @@ const CustomersType = () => {
 
   return (
     <>
-     <Helmet>
+      <Helmet>
         <title>Types of customers</title>
       </Helmet>
-    <div className="container mt-3">
-      <div className="flex flex-col">
-        <div className="flex">
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <button
-                className="add btn-primary py-2 px-2 rounded-lg"
-                onClick={handleOpenAddDialog}
-              >
-                <div className="flex items-center">
-                  <CgAdd className="w-6 h-6" />
-                  <span className="ml-2">Add</span>
-                </div>
-              </button>
+      <div className="container mt-3">
+        <div className="flex flex-col">
+          <div className="flex">
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <button
+                  className="add btn-primary py-2 px-2 rounded-lg"
+                  onClick={handleOpenAddDialog}
+                >
+                  <div className="flex items-center">
+                    <CgAdd className="w-6 h-6" />
+                    <span className="ml-2">Add</span>
+                  </div>
+                </button>
+              </div>
             </div>
+
+            <TypeSearch
+              name={name}
+              setName={setName}
+              days={days}
+              setDays={setDays}
+              amount={amount}
+              setAmount={setAmount}
+              handleReset={handleReset}
+              handleSearch={handleSearch}
+            />
           </div>
-          <InputGroup className="search d-flex ms-5">
-            <FormControl
-              placeholder="Search types..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <FormControl
-              placeholder="Search amount of days..."
-              className="mx-3 d-none d-md-flex"
-              type="number"
-              value={days}
-              onChange={(e) => setDays(e.target.value)}
-            />
-            <FormControl
-              placeholder="Search amount of books..."
-              className="mx-3 d-none d-md-flex"
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-            <Button
-              variant="btn-search"
-              onClick={handleSearch}
-              className="search-icon"
-            >
-              <LuSearch size={30} />
-            </Button>
-          </InputGroup>
+
+          {res?.data.totalTypes > 0 ? (
+            <>
+              <div className="export-button">
+                <TypeExcel data={resAllTypes?.data} />
+              </div>
+
+              <TypesTable
+                TypesData={res?.data.results}
+                handleOpenEditDialog={handleOpenEditDialog}
+                handleDelete={handleDelete}
+              />
+
+              <p className="mt-5">
+                Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
+                Showing {res?.data.pageSize} results per page
+              </p>
+
+              <PaginationButtons
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={res?.data.totalPages > res?.data.pageNo + 1}
+                hasPrevious={res?.data.pageNo > 0}
+              />
+            </>
+          ) : (
+            <div className="flex justify-center items-center mt-16 ">
+              {isLoading ? (
+                <Spinner name="Puff" />
+              ) : (
+                <h5> No results have been found</h5>
+              )}
+            </div>
+          )}
+
+          <AddTypeDialog
+            showAddDialog={showAddDialog}
+            handleCloseAddDialog={handleCloseAddDialog}
+            handleConfirmAdd={handleConfirmAdd}
+            newTypeName={newTypeName}
+            setNewTypeName={setNewTypeName}
+            newTypeDays={newTypeDays}
+            setNewTypeDays={setNewTypeDays}
+            newTypeAmount={newTypeAmount}
+            setNewTypeAmount={setNewTypeAmount}
+          />
+
+          <EditTypeDialog
+            showEditDialog={showEditDialog}
+            handleCloseEditDialog={handleCloseEditDialog}
+            selectedTypeDays={selectedTypeDays}
+            setSelectedTypeDays={setSelectedTypeDays}
+            selectedTypeAmount={selectedTypeAmount}
+            setSelectedTypeAmount={setSelectedTypeAmount}
+            handleConfirmEdit={handleConfirmEdit}
+          />
+
+          <ErrorDialog
+            show={showErrorDialog}
+            onClose={() => setShowErrorDialog(false)}
+            errorMsg={errorMsg}
+          />
         </div>
-
-        {res?.data.totalTypes > 0 ? (
-          <>
-            <table className="mt-4">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Days</th>
-                  <th>Amount</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {res?.data.results.map((type: CustomerType) => (
-                  <tr key={type.id}>
-                    <td>{type.name}</td>
-                    <td>{type.days}</td>
-                    <td>{type.amount}</td>
-                    <td>
-                      <button
-                        className="edit"
-                        onClick={() =>
-                          handleOpenEditDialog(type.days, type.amount, type.id)
-                        }
-                      >
-                        <MdModeEditOutline size={30} />
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="delete"
-                        onClick={() => handleDelete(type.name, type.id)}
-                      >
-                        <AiFillDelete size={30} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-5">
-              Page {res?.data.pageNo + 1} of {res?.data.totalPages},<br />
-              Showing {res?.data.pageSize} results per page
-            </p>
-            <div>
-              {res?.data.totalPages > res?.data.pageNo + 1 && (
-                <Button onClick={nextPage} className="me-3">
-                  Next Page
-                </Button>
-              )}
-              {res?.data.pageNo > 0 && (
-                <Button onClick={previousPage}>Previous Page</Button>
-              )}
-            </div>
-          </>
-        ) : (
-          <div>
-            {isLoading ? <Spinner name="Puff" /> : "No results have been found"}
-          </div>
-        )}
-
-        {/* Dialog add  */}
-
-        <Modal show={showAddDialog} onHide={handleCloseAddDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Type</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormControl
-              placeholder="Enter type name..."
-              className="mb-3"
-              value={newTypeName}
-              onChange={(e) => setNewTypeName(e.target.value)}
-            />
-            <FormControl
-              placeholder="Enter the amount of days..."
-              className="mb-3"
-              type="number"
-              value={newTypeDays}
-              onChange={(e) => setNewTypeDays(parseInt(e.target.value, 10))}
-            />
-            <FormControl
-              placeholder="Enter the amount of books..."
-              type="number"
-              value={newTypeAmount}
-              onChange={(e) => setNewTypeAmount(parseInt(e.target.value, 10))}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseAddDialog}>
-              Cancel
-            </Button>
-            <Button className="save" onClick={handleConfirmAdd}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Dialog edit  */}
-
-        <Modal show={showEditDialog} onHide={handleCloseEditDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Type</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <label>Days:</label>
-            <FormControl
-              placeholder="Enter the amount of days..."
-              className="mb-3"
-              type="number"
-              value={selectedTypeDays}
-              onChange={(e) =>
-                setSelectedTypeDays(parseInt(e.target.value, 10))
-              }
-            />
-            <label>Amount:</label>
-            <FormControl
-              placeholder="Enter the amount of books..."
-              type="number"
-              value={selectedTypeAmount}
-              onChange={(e) =>
-                setSelectedTypeAmount(parseInt(e.target.value, 10))
-              }
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseEditDialog}>
-              Cancel
-            </Button>
-            <Button className="save" onClick={handleConfirmEdit}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={showErrorDialog} onHide={() => setShowErrorDialog(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{errorMsg}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowErrorDialog(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
-    </div>
     </>
   );
 };

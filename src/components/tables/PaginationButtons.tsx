@@ -6,16 +6,11 @@ const PaginationButtons = ({
   hasNext,
   hasPrevious,
 }: any) => {
-
   return (
     <div>
       {hasNext && (
-        <Button
-          variant="info"
-          onClick={onNext}
-          className="me-3"
-        >
-        Next Page
+        <Button variant="info" onClick={onNext} className="me-3">
+          Next Page
         </Button>
       )}
       {hasPrevious && (

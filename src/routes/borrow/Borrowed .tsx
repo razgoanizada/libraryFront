@@ -41,7 +41,7 @@ const Borrowed = () => {
   const [days, setDays] = useState<number | "">("");
   const [selectedBorrowId, setSelectedBorrowId] = useState<number>(0);
 
-  const { data: resAllBorrow } = useQuery("get all borrow", () => Borrow());
+  const { data: resAllBorrow } = useQuery("get all borrows", () => Borrow());
 
   // Fetching borrow from the server
   const { data: res } = useQuery(
