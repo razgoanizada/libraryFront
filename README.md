@@ -18,4 +18,4 @@ You can export the data to an Excel or PDF file. </br>
 In the system you can find 3 types of permissions: </br>
 Simple: can borrow books, manage the customer list and view the book list. </br>
 Professional: In addition, can also manage the book list (add or edit / delete a book). </br>
-Admin: full access to the system, can manage the list of users, the book categories and the customer base. </br>
+Admin: full access to the system, can manage the list of users, the book categories and the customer types. </br>
