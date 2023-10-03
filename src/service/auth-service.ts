@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const basuUrl = "http://localhost:8081/api/v1";
+const basuUrl = "https://ns1.digitalocean.com.razgoanizada.com/api/v1";
 
 export const login = (userName: String, password: String) => {
   return axios.post(`${basuUrl}/login`, { userName, password }).then((res) => {

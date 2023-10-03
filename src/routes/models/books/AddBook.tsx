@@ -41,7 +41,7 @@ const AddBook = () => {
   return (
     <>
       <Helmet>
-        <title>Add Librarian</title>
+        <title>Add Book</title>
       </Helmet>
       <Formik
         validationSchema={validationSchema}

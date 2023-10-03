@@ -37,16 +37,10 @@ const CustomersSearch = ({
         <div className="flex col-10">
           <FormControl
             placeholder="Search First Name..."
+            className="d-none d-lg-flex"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
-          <Button
-            variant="btn-search"
-            onClick={handleSearch}
-            className="search-icon d-flex d-lg-none"
-          >
-            <FcSearch size={30} />
-          </Button>
           <FormControl
             placeholder="Search Last Name..."
             className="mx-3 d-none d-lg-flex"
@@ -105,13 +99,12 @@ const CustomersSearch = ({
                 <option value={librarian.id}>{librarian.userName}</option>
               ))}
           </FormControl>
-          <div className="d-none d-lg-flex align-items-center mx-4">
+          <div className="flex align-items-center mx-4">
             Active:
           </div>
           <FormControl
             as="select"
             placeholder="Active?"
-            className="d-none d-lg-flex"
             value={isActive.toString()}
             onChange={handleIsActiveChange}
           >
@@ -121,7 +114,7 @@ const CustomersSearch = ({
           <Button
             variant="btn-search"
             onClick={handleSearch}
-            className="search-icon d-none d-lg-flex"
+            className="search-icon"
           >
             <LuSearch size={30} />
           </Button>

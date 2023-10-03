@@ -26,7 +26,7 @@ const ExtraTimeDialog = ({
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button className="save" onClick={handleConfirm}>
+        <Button variant="success" className="save" onClick={handleConfirm}>
           Save
         </Button>
       </Modal.Footer>
